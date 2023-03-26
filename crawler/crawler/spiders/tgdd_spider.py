@@ -57,10 +57,11 @@ class TgddSpider(scrapy.Spider):
 
         name = response.xpath("//h1/text()").get()
         price = response.xpath("//*[contains(@class, 'box-price-present')]/text()").get()
-        price = re.sub("\D", "", price)
+        if price: 
+            price = re.sub("\D", "", price)
         cpu = ', '.join(response.xpath("//li/p[contains(text(), 'CPU')]/following-sibling::*[1]/*/text()").getall())
-        ram = ', '.join(response.xpath("//li/p[contains(text(), 'RAM')]/following-sibling::*[1]/*/text()").getall())
-        disk = ', '.join(response.xpath("//li/p[contains(text(), 'Ổ cứng')]/following-sibling::*[1]/*/text()").getall())
+        ram = response.xpath("//li/p[contains(text(), 'RAM')]/following-sibling::*[1]/*/text()").get()
+        disk = ', '.join(filter(None, map(extract_disk, response.xpath("//li/p[contains(text(), 'Ổ cứng')]/following-sibling::*[1]/*/text()").getall())))
         screen = ', '.join(response.xpath("//li/p[contains(text(), 'Màn hình')]/following-sibling::*[1]/*/text()").getall())
         url = response.request.url
         yield {
@@ -73,9 +74,14 @@ class TgddSpider(scrapy.Spider):
             "url": url
         }
 
-        for next_page in response.xpath("//*[contains(@class, 'group desk')]/a/@href").getall():
+        for next_page in response.xpath("(//*[@class='box03 group desk'])[1]/a/@href").getall():
             url = response.urljoin(next_page)
             if url not in self.processed_url:
                 yield scrapy.Request(url=url, callback=self.product_parse)
 
         
+def extract_disk(disk):
+    found = re.search(r'\d+\s*\w*?B\s*(SSD|HDD|EMMC)', disk.upper())
+    if found:
+        found = found.group()
+        return found
