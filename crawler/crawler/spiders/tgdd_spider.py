@@ -56,14 +56,22 @@ class TgddSpider(scrapy.Spider):
         self.processed_url.append(response.request.url)
 
         name = response.xpath("//h1/text()").get()
+
         price = response.xpath("//*[contains(@class, 'box-price-present')]/text()").get()
         if price: 
             price = re.sub("\D", "", price)
+
         cpu = ', '.join(response.xpath("//li/p[contains(text(), 'CPU')]/following-sibling::*[1]/*/text()").getall())
+        
         ram = response.xpath("//li/p[contains(text(), 'RAM')]/following-sibling::*[1]/*/text()").get()
+        
         disk = ', '.join(filter(None, map(extract_disk, response.xpath("//li/p[contains(text(), 'Ổ cứng')]/following-sibling::*[1]/*/text()").getall())))
+        
         screen = ', '.join(response.xpath("//li/p[contains(text(), 'Màn hình')]/following-sibling::*[1]/*/text()").getall())
+        
         url = response.request.url
+
+        # yield result of the current product
         yield {
             "name": name,
             "price": price,
@@ -74,6 +82,7 @@ class TgddSpider(scrapy.Spider):
             "url": url
         }
 
+        # follow the link to other products
         for next_page in response.xpath("(//*[@class='box03 group desk'])[1]/a/@href").getall():
             url = response.urljoin(next_page)
             if url not in self.processed_url:
@@ -81,7 +90,8 @@ class TgddSpider(scrapy.Spider):
 
         
 def extract_disk(disk):
-    found = re.search(r'\d+\s*\w*?B\s*(SSD|HDD|EMMC)', disk.upper())
+    pattern = r'(\d+\s*\w*?B\s*(SSD|HDD|EMMC))|((SSD|HDD|EMMC)\s*\d+\s*\w*?B)'
+    found = re.search(pattern, disk.upper())
     if found:
         found = found.group()
         return found
