@@ -17,7 +17,25 @@ class AllSpider(tgdd_spider.TgddSpider):
     ]
     def start_requests(self):
         for url in self.urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+            yield scrapy.Request(url=url, callback=self.init_parse)
+    def init_parse(self, response):
+        for link in response.xpath("//a/@href").getall():
+            url = response.urljoin(link)
+            # normalize url
+            url = url.split("?")[0].split("#")[0]
+            cut_url = url.split("/")
+            # if go too deep then skip url
+            if len(cut_url) > 5:
+                continue
+
+            if len(cut_url) > 3:
+                section = cut_url[3]
+            else:
+                section = None
+
+            if "https://www.thegioididong.com" in url and section not in self.forbidden:
+                yield scrapy.Request(url=url, callback=self.parse)
+
     def parse(self, response):
         # product name
         name = response.xpath("//h1/text()").get()
@@ -36,15 +54,21 @@ class AllSpider(tgdd_spider.TgddSpider):
                 "url": url
             }
 
-        # follow the link to other products
-        for link in response.xpath("//a/@href").getall():
+        # follow the link to other products that not in header bar
+        for link in response.xpath("//body/*[not(self::header)][not(contains(@class, 'header-top-bar'))]/descendant::a/@href").getall():
             url = response.urljoin(link)
+            # normalize url
             url = url.split("?")[0].split("#")[0]
-            length = len(url.split('/'))
-            if length > 3:
-                section = url.split('/')[3]
+            cut_url = url.split("/")
+            # if go too deep then skip url
+            if len(cut_url) > 5:
+                continue
+
+            if len(cut_url) > 3:
+                section = cut_url[3]
             else:
                 section = None
-            if "https://www.thegioididong.com" in url and (length == 4 or length == 5) and section not in self.forbidden:
+                
+            if "https://www.thegioididong.com" in url and section not in self.forbidden:
                 yield scrapy.Request(url=url, callback=self.parse)
         
