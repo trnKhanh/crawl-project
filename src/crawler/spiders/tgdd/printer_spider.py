@@ -34,7 +34,7 @@ class PrinterSpider(tgdd_spider.TgddSpider):
             "ink_type": ink_type,
             "print_quality": print_quality,
             "paper_type": paper_type,
-            "brand": "brand",
+            "brand": brand,
             "url": url
         }
 
