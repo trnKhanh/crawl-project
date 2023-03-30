@@ -2,10 +2,10 @@ from . import tgdd_spider
 import re
 from . import tgdd_utils
 
-class WatchSpider(tgdd_spider.TgddSpider):
-    name = "tgdd_watch"
+class KeyboardSpider(tgdd_spider.TgddSpider):
+    name = "tgdd_keyboard"
     urls = [
-        'https://www.thegioididong.com/Category/FilterProductBox?c=7077&o=17&priceminmax=0-1000000&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=4547&o=14&priceminmax=0-1000000&pi=0',
     ]
 
     def product_parse(self, response):
@@ -17,7 +17,9 @@ class WatchSpider(tgdd_spider.TgddSpider):
         if price: 
             price = re.sub(r"\D", "", price)
         # parse product parameter
-        screen = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Màn hình")).getall())
+        compatible = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Tương thích")).getall())
+        connect_type = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Cách kết nối")).getall())
+        size = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Số phím")).getall())
         brand = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Hãng")).getall())
         url = response.request.url
 
@@ -25,7 +27,9 @@ class WatchSpider(tgdd_spider.TgddSpider):
         yield {
             "name": name,
             "price": price,
-            "screen": screen,
+            "compatible": compatible,
+            "connect_type": connect_type,
+            "size": size,
             "brand": brand,
             "url": url
         }

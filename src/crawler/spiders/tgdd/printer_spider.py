@@ -1,5 +1,4 @@
 from . import tgdd_spider
-import scrapy
 import re
 from . import tgdd_utils
 
@@ -23,7 +22,7 @@ class PrinterSpider(tgdd_spider.TgddSpider):
         ink_type = ', '.join(response.xpath(tgdd_utils.parameter_xpath('Loại mực in')).getall())
         print_quality = ', '.join(response.xpath(tgdd_utils.parameter_xpath('Chất lượng in')).getall())
         paper_type = ', '.join(response.xpath(tgdd_utils.parameter_xpath('Giấy in')).getall())
-
+        brand = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Hãng")).getall())
         url = response.request.url
 
         # yield result of the current product
@@ -35,6 +34,7 @@ class PrinterSpider(tgdd_spider.TgddSpider):
             "ink_type": ink_type,
             "print_quality": print_quality,
             "paper_type": paper_type,
+            "brand": "brand",
             "url": url
         }
 

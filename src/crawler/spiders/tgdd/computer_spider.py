@@ -23,6 +23,7 @@ class ComputerSpider(tgdd_spider.TgddSpider):
         ram = tgdd_utils.normalize_disk_amount(response.xpath(tgdd_utils.parameter_xpath("RAM")).get())
         disk = ', '.join(filter(None, map(tgdd_utils.extract_disk, response.xpath(tgdd_utils.parameter_xpath("Ổ cứng")).getall())))
         screen = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Màn hình")).getall())
+        product_OS = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Hệ điều hành")).getall())
         url = response.request.url
 
         # yield result of the current product
@@ -33,6 +34,7 @@ class ComputerSpider(tgdd_spider.TgddSpider):
             "ram": ram,
             "disk": disk,
             "screen": screen,
+            "OS": product_OS,
             "url": url
         }
 

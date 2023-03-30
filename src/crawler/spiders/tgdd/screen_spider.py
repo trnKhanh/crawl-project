@@ -1,5 +1,4 @@
 from . import tgdd_spider
-import scrapy
 import re
 from . import tgdd_utils
 
