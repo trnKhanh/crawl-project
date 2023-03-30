@@ -12,10 +12,11 @@ BOT_NAME = "crawler"
 SPIDER_MODULES = ["crawler.spiders"]
 NEWSPIDER_MODULE = "crawler.spiders"
 LOG_FILE = 'tgdd.log'
-LOG_FILE_APPEND = False
+LOG_FILE_APPEND = True
 FEEDS = {
     'text/items.jsonl': {'format': 'jsonl'}
 }
+DUPEFILTER_CLASS = 'crawler.duplicate_filter.CustomFilter'
 # DUPEFILTER_DEBUG = True
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
