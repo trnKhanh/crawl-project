@@ -1,6 +1,6 @@
 from . import tgdd_spider
 import re
-from . import tgdd_utils
+from .tgdd_utils import *
 
 class MouseSpider(tgdd_spider.TgddSpider):
     name = "tgdd_mouse"
@@ -17,21 +17,28 @@ class MouseSpider(tgdd_spider.TgddSpider):
         if price: 
             price = re.sub(r"\D", "", price)
         # parse product parameter
-        dpi = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Độ phân giải")).getall())
-        connect_type = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Cách kết nối")).getall())
-        brand = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Hãng")).getall())
+        dpi = ', '.join(response.xpath(parameter_xpath("Độ phân giải")).getall())
+        connect_type = ', '.join(response.xpath(parameter_xpath("Cách kết nối")).getall())
+        brand = ', '.join(response.xpath(parameter_xpath("Hãng")).getall())
         url = response.request.url
 
         # yield result of the current product
-        yield {
-            "name": name,
-            "price": price,
-            "dpi": dpi,
-            "connect_type": connect_type,
-            "brand": brand,
-            "url": url
-        }
-
+        # yield {
+        #     "name": name,
+        #     "price": price,
+        #     "dpi": dpi,
+        #     "connect_type": connect_type,
+        #     "brand": brand,
+        #     "url": url
+        # }
+        # add data to database
+        sql = """
+            INSERT INTO mouse (name, price, dpi, connect_type, brand, url) 
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE id=id
+        """
+        crawl_cursor.execute(sql, (name, price, dpi, connect_type, brand, url))
+        crawl_db.commit()
         # follow the link to other products
         yield from self.product_follow(response)
         

@@ -1,6 +1,6 @@
 from . import tgdd_spider
 import re
-from . import tgdd_utils
+from .tgdd_utils import *
 
 class KeyboardSpider(tgdd_spider.TgddSpider):
     name = "tgdd_keyboard"
@@ -17,23 +17,30 @@ class KeyboardSpider(tgdd_spider.TgddSpider):
         if price: 
             price = re.sub(r"\D", "", price)
         # parse product parameter
-        compatible = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Tương thích")).getall())
-        connect_type = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Cách kết nối")).getall())
-        size = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Số phím")).getall())
-        brand = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Hãng")).getall())
+        compatible = ', '.join(response.xpath(parameter_xpath("Tương thích")).getall())
+        connect_type = ', '.join(response.xpath(parameter_xpath("Cách kết nối")).getall())
+        size = ', '.join(response.xpath(parameter_xpath("Số phím")).getall())
+        brand = ', '.join(response.xpath(parameter_xpath("Hãng")).getall())
         url = response.request.url
 
         # yield result of the current product
-        yield {
-            "name": name,
-            "price": price,
-            "compatible": compatible,
-            "connect_type": connect_type,
-            "size": size,
-            "brand": brand,
-            "url": url
-        }
-
+        # yield {
+        #     "name": name,
+        #     "price": price,
+        #     "compatible": compatible,
+        #     "connect_type": connect_type,
+        #     "size": size,
+        #     "brand": brand,
+        #     "url": url
+        # }
+        # add data to database
+        sql = """
+            INSERT INTO keyboard (name, price, compatible, connect_type, size, brand, url) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE id=id
+        """
+        crawl_cursor.execute(sql, (name, price, compatible, connect_type, size, brand, url))
+        crawl_db.commit()
         # follow the link to other products
         yield from self.product_follow(response)
         

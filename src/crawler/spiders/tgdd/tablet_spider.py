@@ -1,6 +1,6 @@
 from . import tgdd_spider
 import re
-from . import tgdd_utils
+from .tgdd_utils import *
 
 class TabletSpider(tgdd_spider.TgddSpider):
     name = "tgdd_tablet"
@@ -19,26 +19,34 @@ class TabletSpider(tgdd_spider.TgddSpider):
             if price: 
                 price = re.sub(r"\D", "", price)
             # parse product parameter
-            chip = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Chip")).getall())
-            ram = tgdd_utils.normalize_disk_amount(response.xpath(tgdd_utils.parameter_xpath("RAM")).get())
-            disk = ', '.join(filter(None, map(tgdd_utils.extract_disk, response.xpath(tgdd_utils.parameter_xpath("Dung lượng lưu trữ")).getall())))
-            screen = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Màn hình")).getall())
-            product_OS = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Hệ điều hành")).getall())
+            chip = ', '.join(response.xpath(parameter_xpath("Chip")).getall())
+            ram = normalize_disk_amount(response.xpath(parameter_xpath("RAM")).get())
+            disk = ', '.join(filter(None, map(extract_disk, response.xpath(parameter_xpath("Dung lượng lưu trữ")).getall())))
+            screen = ', '.join(response.xpath(parameter_xpath("Màn hình")).getall())
+            product_OS = ', '.join(response.xpath(parameter_xpath("Hệ điều hành")).getall())
             url = response.request.url
 
             # yield result of the current product
-            yield {
-                "name": name,
-                "price": price,
-                "chip": chip,
-                "ram": ram,
-                "disk": disk,
-                "screen": screen,
-                "OS": product_OS,
-                "url": url
-            }
+            # yield {
+            #     "name": name,
+            #     "price": price,
+            #     "chip": chip,
+            #     "ram": ram,
+            #     "disk": disk,
+            #     "screen": screen,
+            #     "OS": product_OS,
+            #     "url": url
+            # }
+            # add data to database
+            sql = """
+                INSERT INTO tablet (name, price, chip, ram, disk, screen, OS, url) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                ON DUPLICATE KEY UPDATE id=id
+            """
+            crawl_cursor.execute(sql, (name, price, chip, ram, disk, screen, product_OS, url))
+            crawl_db.commit()
         else:
-            yield from self.preorder_parse(response)
+            self.preorder_parse(response)
 
         # follow the link to other products
         yield from self.product_follow(response)
@@ -56,22 +64,31 @@ class TabletSpider(tgdd_spider.TgddSpider):
             if price: 
                 price = re.sub(r"\D", "", price)
             # product parameter
-            chip = ', '.join(section.xpath(tgdd_utils.parameter_xpath("Chip")).getall())
-            ram = tgdd_utils.normalize_disk_amount(section.xpath(tgdd_utils.parameter_xpath("RAM")).get())
-            disk = ', '.join(filter(None, map(tgdd_utils.extract_disk, section.xpath(tgdd_utils.parameter_xpath("Dung lượng lưu trữ")).getall())))
-            screen = ', '.join(section.xpath(tgdd_utils.parameter_xpath("Màn hình")).getall())
+            chip = ', '.join(section.xpath(parameter_xpath("Chip")).getall())
+            ram = normalize_disk_amount(section.xpath(parameter_xpath("RAM")).get())
+            disk = ', '.join(filter(None, map(extract_disk, section.xpath(parameter_xpath("Dung lượng lưu trữ")).getall())))
+            screen = ', '.join(section.xpath(parameter_xpath("Màn hình")).getall())
+            product_OS = ', '.join(response.xpath(parameter_xpath("Hệ điều hành")).getall())
             url = response.request.url
 
             # yield result of the current product
-            yield {
-                "name": name,
-                "price": price,
-                "chip": chip,
-                "ram": ram,
-                "disk": disk,
-                "screen": screen,
-                "url": url
-            }
+            # yield {
+            #     "name": name,
+            #     "price": price,
+            #     "chip": chip,
+            #     "ram": ram,
+            #     "disk": disk,
+            #     "screen": screen,
+            #     "url": url
+            # }
+            # add data to database
+            sql = """
+                INSERT INTO tablet (name, price, chip, ram, disk, screen, OS, url) 
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                ON DUPLICATE KEY UPDATE id=id
+            """
+            crawl_cursor.execute(sql, (name, price, chip, ram, disk, screen, product_OS, url))
+            crawl_db.commit()
             
             
         

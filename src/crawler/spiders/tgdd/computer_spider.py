@@ -1,7 +1,7 @@
 from . import tgdd_spider
 import scrapy
 import re
-from . import tgdd_utils
+from .tgdd_utils import *
 
 class ComputerSpider(tgdd_spider.TgddSpider):
     name = "tgdd_computer"
@@ -19,25 +19,32 @@ class ComputerSpider(tgdd_spider.TgddSpider):
         if price: 
             price = re.sub(r"\D", "", price)
         # parse product parameter
-        cpu = ', '.join(response.xpath(tgdd_utils.parameter_xpath("CPU")).getall())
-        ram = tgdd_utils.normalize_disk_amount(response.xpath(tgdd_utils.parameter_xpath("RAM")).get())
-        disk = ', '.join(filter(None, map(tgdd_utils.extract_disk, response.xpath(tgdd_utils.parameter_xpath("Ổ cứng")).getall())))
-        screen = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Màn hình")).getall())
-        product_OS = ', '.join(response.xpath(tgdd_utils.parameter_xpath("Hệ điều hành")).getall())
+        cpu = ', '.join(response.xpath(parameter_xpath("CPU")).getall())
+        ram = normalize_disk_amount(response.xpath(parameter_xpath("RAM")).get())
+        disk = ', '.join(filter(None, map(extract_disk, response.xpath(parameter_xpath("Ổ cứng")).getall())))
+        screen = ', '.join(response.xpath(parameter_xpath("Màn hình")).getall())
+        product_OS = ', '.join(response.xpath(parameter_xpath("Hệ điều hành")).getall())
         url = response.request.url
 
         # yield result of the current product
-        yield {
-            "name": name,
-            "price": price,
-            "cpu": cpu,
-            "ram": ram,
-            "disk": disk,
-            "screen": screen,
-            "OS": product_OS,
-            "url": url
-        }
-
+        # yield {
+        #     "name": name,
+        #     "price": price,
+        #     "cpu": cpu,
+        #     "ram": ram,
+        #     "disk": disk,
+        #     "screen": screen,
+        #     "OS": product_OS,
+        #     "url": url
+        # }
+        # add data to database
+        sql = """
+            INSERT INTO computer (name, price, cpu, ram, disk, screen, OS, url) 
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            ON DUPLICATE KEY UPDATE id=id
+        """
+        crawl_cursor.execute(sql, (name, price, cpu, ram, disk, screen, product_OS, url))
+        crawl_db.commit()
         # follow the link to other products
         yield from self.product_follow(response)
         

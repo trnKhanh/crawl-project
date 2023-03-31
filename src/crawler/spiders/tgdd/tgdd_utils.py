@@ -1,4 +1,5 @@
 import regex as re
+import mysql.connector
 
 def extract_disk(disk):
     if disk == None:
@@ -56,3 +57,9 @@ disk_unit_rate = {
 }
 def parameter_xpath(parameter_name):
     return f'descendant-or-self::*[contains(@class, "parameter")]/descendant::li/*[descendant-or-self::*[contains(text(), "{parameter_name}")]]/following-sibling::*[1]/*/text()'
+crawl_db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    database="crawl_database"
+)
+crawl_cursor = crawl_db.cursor()
