@@ -1,3 +1,5 @@
+USE crawl_database;
+
 CREATE TABLE tablet(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name NVARCHAR(200),
