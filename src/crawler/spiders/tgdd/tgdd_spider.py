@@ -11,14 +11,14 @@ class TgddSpider(scrapy.Spider):
     name = 'tgdd'
     urls = [
         'https://www.thegioididong.com/Category/FilterProductBox?c=44&o=17&priceminmax=0-1000000&pi=0',
-        # 'https://www.thegioididong.com/Category/FilterProductBox?c=5698&o=7&priceminmax=0-1000000&pi=0',
-        # 'https://www.thegioididong.com/Category/FilterProductBox?c=4547&o=14&priceminmax=0-1000000&pi=0',
-        # 'https://www.thegioididong.com/Category/FilterProductBox?c=86&o=14&priceminmax=0-1000000&pi=0',
-        # 'https://www.thegioididong.com/Category/FilterProductBox?c=5693&priceminmax=0-1000000&o=13&pi=0',
-        # 'https://www.thegioididong.com/Category/FilterProductBox?c=5697&priceminmax=0-1000000&pi=0',
-        # 'https://www.thegioididong.com/Category/FilterProductBox?c=522&o=17&priceminmax=0-1000000&pi=0',
-        # 'https://www.thegioididong.com/Category/FilterProductBox?c=42&o=17&priceminmax=0-1000000&pi=0',
-        # 'https://www.thegioididong.com/Category/FilterProductBox?c=7077&o=17&priceminmax=0-1000000&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=5698&o=7&priceminmax=0-1000000&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=4547&o=14&priceminmax=0-1000000&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=86&o=14&priceminmax=0-1000000&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=5693&priceminmax=0-1000000&o=13&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=5697&priceminmax=0-1000000&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=522&o=17&priceminmax=0-1000000&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=42&o=17&priceminmax=0-1000000&pi=0',
+        'https://www.thegioididong.com/Category/FilterProductBox?c=7077&o=17&priceminmax=0-1000000&pi=0',
 
     ]
     post_data = urlencode({"IsParentCate": False, "IsShowCompare": True, "prevent": True})
