@@ -12,7 +12,19 @@ CREATE TABLE tablet(
     url NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_tablet_url ON tablet(url);
-CREATE TABLE computer(
+CREATE TABLE phone(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name NVARCHAR(200),
+    price INT,
+    chip NVARCHAR(200),
+    ram NVARCHAR(200),
+    disk NVARCHAR(200),
+    screen NVARCHAR(200),
+    OS NVARCHAR(200),
+    url NVARCHAR(200)
+);
+CREATE UNIQUE INDEX unique_phone_url ON phone(url);
+CREATE TABLE laptop(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name NVARCHAR(200),
     price INT,
@@ -23,7 +35,19 @@ CREATE TABLE computer(
     OS NVARCHAR(200),
     url NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_computer_url ON computer(url);
+CREATE UNIQUE INDEX unique_laptop_url ON laptop(url);
+CREATE TABLE PC(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name NVARCHAR(200),
+    price INT,
+    cpu NVARCHAR(200),
+    ram NVARCHAR(200),
+    disk NVARCHAR(200),
+    screen NVARCHAR(200),
+    OS NVARCHAR(200),
+    url NVARCHAR(200)
+);
+CREATE UNIQUE INDEX unique_PC_url ON PC(url);
 CREATE TABLE screen(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name NVARCHAR(200),
@@ -67,7 +91,7 @@ CREATE TABLE printer(
     url NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_printer_url ON printer(url);
-CREATE TABLE watch(
+CREATE TABLE smart_watch(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name NVARCHAR(200),
     price INT,
@@ -75,4 +99,4 @@ CREATE TABLE watch(
     brand NVARCHAR(200),
     url NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_watch_url ON watch(url);
+CREATE UNIQUE INDEX unique_smart_watch_url ON smart_watch(url);
