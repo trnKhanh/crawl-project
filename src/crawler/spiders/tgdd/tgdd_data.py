@@ -13,7 +13,7 @@ def get_category_table(id):
     if id in category_table:
         return category_table[id]
     else:
-        return None
+        return "misc"
     
 category_id = {}
 for id in category_table:
