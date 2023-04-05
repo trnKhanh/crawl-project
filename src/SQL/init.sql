@@ -1,102 +1,105 @@
 USE crawl_database;
 
-CREATE TABLE tablet(
+CREATE TABLE Tablet(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    chip NVARCHAR(200),
-    ram NVARCHAR(200),
-    disk NVARCHAR(200),
-    screen NVARCHAR(200),
+    Name NVARCHAR(200),
+    Price INT,
+    Chip NVARCHAR(200),
+    RAM NVARCHAR(200),
+    Disk NVARCHAR(200),
+    Screen NVARCHAR(200),
     OS NVARCHAR(200),
-    url NVARCHAR(200)
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_tablet_url ON tablet(url);
-CREATE TABLE phone(
+CREATE TABLE Phone(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    chip NVARCHAR(200),
-    ram NVARCHAR(200),
-    disk NVARCHAR(200),
-    screen NVARCHAR(200),
+    Name NVARCHAR(200),
+    Price INT,
+    Chip NVARCHAR(200),
+    RAM NVARCHAR(200),
+    Disk NVARCHAR(200),
+    Screen NVARCHAR(200),
     OS NVARCHAR(200),
-    url NVARCHAR(200)
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_phone_url ON phone(url);
-CREATE TABLE laptop(
+CREATE TABLE Laptop(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    cpu NVARCHAR(200),
-    ram NVARCHAR(200),
-    disk NVARCHAR(200),
-    screen NVARCHAR(200),
+    Name NVARCHAR(200),
+    Price INT,
+    CPU NVARCHAR(200),
+    RAM NVARCHAR(200),
+    Disk NVARCHAR(200),
+    Screen NVARCHAR(200),
     OS NVARCHAR(200),
-    url NVARCHAR(200)
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_laptop_url ON laptop(url);
 CREATE TABLE PC(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    cpu NVARCHAR(200),
-    ram NVARCHAR(200),
-    disk NVARCHAR(200),
-    screen NVARCHAR(200),
+    Name NVARCHAR(200),
+    Price INT,
+    CPU NVARCHAR(200),
+    RAM NVARCHAR(200),
+    Disk NVARCHAR(200),
+    Screen NVARCHAR(200),
     OS NVARCHAR(200),
-    url NVARCHAR(200)
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_PC_url ON PC(url);
-CREATE TABLE screen(
+CREATE TABLE Screen(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    screen_type NVARCHAR(200),
-    screen_size NVARCHAR(200),
-    url NVARCHAR(200)
+    Name NVARCHAR(200),
+    Price INT,
+    Screen_type NVARCHAR(200),
+    Screen_size NVARCHAR(200),
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_screen_url ON screen(url);
-CREATE TABLE mouse(
+CREATE TABLE Mouse(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    dpi NVARCHAR(200),
-    connect_type NVARCHAR(200),
-    brand NVARCHAR(200),
-    url NVARCHAR(200)
+    Name NVARCHAR(200),
+    Price INT,
+    DPI NVARCHAR(200),
+    Connect_type NVARCHAR(200),
+    Brand NVARCHAR(200),
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_mouse_url ON mouse(url);
-CREATE TABLE keyboard(
+CREATE TABLE Keyboard(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    compatible NVARCHAR(200),
-    connect_type NVARCHAR(200),
-    size NVARCHAR(200),
-    brand NVARCHAR(200),
-    url NVARCHAR(200)
+    Name NVARCHAR(200),
+    Price INT,
+    Compatible NVARCHAR(200),
+    Connect_type NVARCHAR(200),
+    Size NVARCHAR(200),
+    Brand NVARCHAR(200),
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_keyboard_url ON keyboard(url);
-CREATE TABLE printer(
+CREATE TABLE Smart_Watch(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    printer_type NVARCHAR(200),
-    print_speed NVARCHAR(200),
-    ink_type NVARCHAR(200),
-    print_quality NVARCHAR(200),
-    paper_type NVARCHAR(200),
-    brand NVARCHAR(200),
-    url NVARCHAR(200)
-);
-CREATE UNIQUE INDEX unique_printer_url ON printer(url);
-CREATE TABLE smart_watch(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name NVARCHAR(200),
-    price INT,
-    screen NVARCHAR(200),
-    brand NVARCHAR(200),
-    url NVARCHAR(200)
+    Name NVARCHAR(200),
+    Price INT,
+    Screen NVARCHAR(200),
+    Brand NVARCHAR(200),
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_smart_watch_url ON smart_watch(url);
+CREATE TABLE Other(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name NVARCHAR(200),
+    price INT,
+    url NVARCHAR(200),
+    image_path NVARCHAR(200)
+);
+CREATE UNIQUE INDEX unique_other_url ON other(url);
