@@ -3,7 +3,6 @@ category_table = {
     5698: "PC",
     4547: "keyboard",
     86: "mouse",
-    5693: "printer",
     5697: "screen",
     522: "tablet",
     42: "phone",
@@ -43,14 +42,6 @@ category_parameter = {
     category_id["mouse"]: {
         "dpi": "Độ phân giải",
         "connect_type": "Cách kết nối",
-        "brand": "Hãng",
-    },
-    category_id["printer"]: {
-        "printer_type": 'Loại máy',
-        "print_speed": 'Tốc độ in',
-        "ink_type": 'Loại mực in',
-        "print_quality": 'Chất lượng in',
-        "paper_type": 'Giấy in',
         "brand": "Hãng",
     },
     category_id["screen"]: {

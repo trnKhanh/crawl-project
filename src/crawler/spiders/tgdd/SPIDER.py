@@ -4,8 +4,9 @@ from scrapy.http import HtmlResponse
 import json
 from urllib.parse import urlencode
 from .tgdd_utils import *
-from .tgdd_data import *
+from .data import *
 import regex as re
+from crawler.items import ProductItem
 
 class TgddSpider(scrapy.Spider):
     name = 'tgdd'
@@ -16,6 +17,9 @@ class TgddSpider(scrapy.Spider):
     category_urls = [
         # 'https://www.thegioididong.com/dong-ho-deo-tay',
         'https://www.thegioididong.com/laptop',
+        'https://www.thegioididong.com/may-tinh-bang',
+        'https://www.thegioididong.com/dtdd',
+        'https://www.thegioididong.com/may-tinh-de-ban',
     ]
     post_data = urlencode({"IsParentCate": False, "IsShowCompare": True, "prevent": True})
 
@@ -56,12 +60,17 @@ class TgddSpider(scrapy.Spider):
     def filter_parse(self, response):
         data = json.loads(response.text)
         products = HtmlResponse(url="https://www.thegioididong.com", body=data["listproducts"], encoding="utf-8")
-        
-
+    
         # find and follow to product pages
-        for product_link in products.xpath("//li/a[1]/@href").getall():
-            url = response.urljoin(product_link)
-            yield scrapy.Request(url=url, callback=self.product_parse)
+        for product in products.xpath("//li[contains(@class, 'item')]"):
+            product_link = product.xpath("child::a[1]/@href").get()
+            url = products.urljoin(product_link)
+
+            thumb_image_url = product.xpath("descendant::img[contains(@class, 'thumb')]/@data-src").get()
+            if thumb_image_url:
+                thumb_image_url = products.urljoin(thumb_image_url)
+
+            yield scrapy.Request(url=url, callback=self.product_parse, meta={"thumb_image_url": thumb_image_url})
 
         # request more data from tgdd's database
         if not response.meta.get("request-more"):
@@ -78,60 +87,53 @@ class TgddSpider(scrapy.Spider):
                 )
     
     def product_parse(self, response):
+        # find product_box
         product_box = response.xpath("//section[contains(@class, 'detail')]")
         if not product_box:
             return
-        # id = int(product_box.xpath("self::*/@data-cate-id").get())
+        # get product category id
         id = int(product_box.xpath("self::*/@data-cate-id").get())
-        parameter_list = [] # store name of parameter
-        parameter_data = [] # store the data about corresponding parameter
+
+        product_info = {}
 
         # product name
-        name = response.xpath("//h1/text()").get()
+        name = product_box.xpath("//h1/text()").get()
+        # normalize name
         to_remove = re.search(r'[\\/()]', name)
         if to_remove:
             to_remove = to_remove.start()
         else:
             to_remove = len(name)
         name = name[:to_remove]
-        parameter_list.append("name")
-        parameter_data.append(name)
+        product_info["name"] = name
 
         # product price
-        price = response.xpath("//*[contains(@class, 'box-price-present')]/text()").get()
+        price = product_box.xpath("//*[contains(@class, 'box-price-present')]/text()").get()
         # normalize product price to integer
         if price: 
             price = re.sub(r"\D", "", price)
-        price = int(price)
-        parameter_list.append("price")
-        parameter_data.append(price)
+            price = int(price)
+        product_info["price"] = price
 
         # parse product parameter
         if id in category_parameter:
-            for parameter_name in category_parameter[id]:
+            for parameter_name, name_in_web in category_parameter[id].items():
                 if parameter_name == "disk":
-                    data = ', '.join(filter(None, map(extract_disk, product_box.xpath(parameter_xpath(category_parameter[id][parameter_name])).getall())))
+                    data = ', '.join(filter(None, map(extract_disk, product_box.xpath(parameter_xpath(name_in_web)).getall())))
                 elif parameter_name == "ram":
-                    data = product_box.xpath(parameter_xpath(category_parameter[id][parameter_name])).get()
+                    data = product_box.xpath(parameter_xpath(name_in_web)).get()
                 else:
-                    data = ', '.join(product_box.xpath(parameter_xpath(category_parameter[id][parameter_name])).getall())
-                parameter_list.append(parameter_name)
-                parameter_data.append(data)
+                    data = ', '.join(product_box.xpath(parameter_xpath(name_in_web)).getall())
+                product_info[parameter_name] = data
+
         # parse product url
         url = response.request.url
-        parameter_list.append("url")
-        parameter_data.append(url)
-        yield {
-            "name": name
-        }
-        # add data to database
-        sql = f"""
-            INSERT INTO {get_category_table(id)} ({', '.join(parameter_list)}) 
-            VALUES ({("%s," * len(parameter_list)).strip(',')})
-            ON DUPLICATE KEY UPDATE id=id
-        """
-        crawl_cursor.execute(sql, parameter_data)
-        crawl_db.commit()
+        product_info["url"] = url
+
+        category = get_category_table(id)
+        image_urls = [response.meta.get("thumb_image_url")]
+
+        yield ProductItem(category=category, image_urls = image_urls, product_info=product_info)
         # follow the link to other products
         yield from self.product_follow(response)
     
