@@ -118,12 +118,17 @@ class TgddSpider(scrapy.Spider):
         # parse product parameter
         if id in category_parameter:
             for parameter_name, name_in_web in category_parameter[id].items():
-                if parameter_name == "disk":
+                if parameter_name.lower() == "disk":
                     data = ', '.join(filter(None, map(extract_disk, product_box.xpath(parameter_xpath(name_in_web)).getall())))
-                elif parameter_name == "ram":
+                elif parameter_name.lower() == "ram":
                     data = product_box.xpath(parameter_xpath(name_in_web)).get()
+                elif parameter_name.lower() in ["cpu", "chip"]:
+                    data = ' '.join(product_box.xpath(parameter_xpath(name_in_web)).getall())
                 else:
                     data = ', '.join(product_box.xpath(parameter_xpath(name_in_web)).getall())
+                
+                if data == '':
+                    data = None
                 product_info[parameter_name] = data
 
         # parse product url

@@ -12,7 +12,7 @@ CREATE TABLE Tablet(
     url NVARCHAR(200),
     image_path NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_tablet_url ON tablet(url);
+CREATE UNIQUE INDEX unique_Tablet_url ON Tablet(url);
 CREATE TABLE Phone(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
@@ -25,7 +25,7 @@ CREATE TABLE Phone(
     url NVARCHAR(200),
     image_path NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_phone_url ON phone(url);
+CREATE UNIQUE INDEX unique_Phone_url ON Phone(url);
 CREATE TABLE Laptop(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
@@ -38,7 +38,7 @@ CREATE TABLE Laptop(
     url NVARCHAR(200),
     image_path NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_laptop_url ON laptop(url);
+CREATE UNIQUE INDEX unique_Laptop_url ON Laptop(url);
 CREATE TABLE PC(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
@@ -61,7 +61,7 @@ CREATE TABLE Screen(
     url NVARCHAR(200),
     image_path NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_screen_url ON screen(url);
+CREATE UNIQUE INDEX unique_Screen_url ON Screen(url);
 CREATE TABLE Mouse(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
@@ -72,7 +72,7 @@ CREATE TABLE Mouse(
     url NVARCHAR(200),
     image_path NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_mouse_url ON mouse(url);
+CREATE UNIQUE INDEX unique_Mouse_url ON Mouse(url);
 CREATE TABLE Keyboard(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
@@ -84,8 +84,8 @@ CREATE TABLE Keyboard(
     url NVARCHAR(200),
     image_path NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_keyboard_url ON keyboard(url);
-CREATE TABLE Smart_Watch(
+CREATE UNIQUE INDEX unique_Keyboard_url ON Keyboard(url);
+CREATE TABLE Smart_watch(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
     Price INT,
@@ -94,7 +94,7 @@ CREATE TABLE Smart_Watch(
     url NVARCHAR(200),
     image_path NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_smart_watch_url ON smart_watch(url);
+CREATE UNIQUE INDEX unique_Smart_watch_url ON Smart_watch(url);
 CREATE TABLE Other(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name NVARCHAR(200),
@@ -102,4 +102,4 @@ CREATE TABLE Other(
     url NVARCHAR(200),
     image_path NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_other_url ON other(url);
+CREATE UNIQUE INDEX unique_Other_url ON Other(url);
