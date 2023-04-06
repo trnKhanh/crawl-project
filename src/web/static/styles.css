@@ -1,0 +1,255 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+.header-top {
+    display: flex;
+}
+.logo {
+    width: 150px;
+}
+.search-bar {
+    flex: 1;
+    align-self: center;
+    text-align: center;
+    display: flex;
+    margin: 0 auto 0 auto;
+    height: 34px;
+    max-width: 600px;
+}
+.search-bar > input[type="text"]{
+    flex: 1;
+    margin-right: 40px;
+    font-size: 16px;
+}
+.search-bar > input[type="submit"]{
+    border-radius: 10px;
+    border: 2px solid white;
+    font-size: 16px;
+}
+footer {
+    height: 34px;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.nav-bar {
+    height: 44px;
+    background-color: grey;
+    display: flex;
+    align-items: center;
+}
+.nav-btn {
+    flex-shrink: 0;
+    text-decoration: none;
+    height: 30px;
+    padding: 0 10px;
+    margin: 0 5px;
+    color: white;
+    border: black solid 2px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+.nav-btn:hover {
+    background-color: black;
+}
+.filter-box {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border: green solid 2px;
+}
+.filter-box input[type="text"] {
+    height: 34px;
+    font-size: 16px;
+    width: auto;
+    max-width: 400px;
+    flex: 1;
+    margin-right: 20px;
+}
+.filter-box input[type="submit"]{
+    border-radius: 10px;
+    border: 2px solid white;
+    font-size: 16px;
+    height: 34px;
+    align-self: center;
+}
+.filter-search-bar {
+    display: flex;
+}
+.sort-type {
+    font-size: 16px;
+}
+.product-search-result {
+    display: flex;
+}
+.product-search-result * {
+    color: rgb(14, 170, 170);
+}
+.product-search-number {
+    margin-left: 20px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.product-search-text {
+    margin-left: 5px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.filter {
+    margin: 10px 0;
+    height: 34px;
+    display: flex;
+    align-items: center;
+}
+.filter-parameter {
+    position: relative;
+    margin: 0 5px;
+}
+.filter-parameter-name {
+    height: 30px;
+    position: relative;
+    padding: 0 10px;
+    border: black solid 2px;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.filter-value-box {
+    position: absolute;
+    width: 300px;
+    left: 0px;
+    top: 45px;
+    flex-wrap: wrap;
+    display: none;
+    background-color: white;
+    /* border: black solid 2px; */
+    box-shadow: 0 2px 20px gray;
+    padding: 10px;
+}
+.filter-value {
+    margin: 5px 5px;
+    padding: 10px;
+    border: #e0e0e0 solid;
+}
+.arrow-filter {
+    box-shadow: 0 2px 10px gray;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: 34px;
+    left: 10px;
+    transform: rotate(45deg);
+    display: none;
+    background-color: white;
+    /* overflow: hidden; */
+}
+.check {
+    border-color: blue;
+}
+.restore-default {
+    font-size: 20px;
+    padding: 10px 10px;
+    background-color: red;
+    color: white;
+    border-radius: 15px;
+    justify-self: start;
+    align-self: flex-start;
+}
+
+.listproduct {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 20px 10px;
+}
+.product-box {
+    margin: 10px 2.5%;
+    width: 20%;
+    height: 300px;
+    padding: 10px;
+    border: gray solid 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.product-img {
+    /* width: 50%; */
+    max-width: 80%;
+    max-height: 80%;
+    align-self: center;
+}
+.category-name-box {
+    padding-left: 20px;
+    padding-top: 5px;
+}
+.category-name-box * {
+    font-size: 40px;
+    color: grey;
+}
+.category-name {
+    color: black;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+/* Page buttons style */
+.paging-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.paging-btn {
+    margin: 0 10px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(236, 233, 233);
+    border-radius: 3px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.current-page {
+    background-color: cyan;
+}
+.navigate-page {
+    cursor: pointer;
+}
+.error-box {
+    margin: 0 auto;
+    font-size: 30px;
+    color: red;
+    font-weight: bold;
+}
+.visible {
+    display: flex;
+}
