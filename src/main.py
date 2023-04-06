@@ -10,7 +10,7 @@ def crawling():
     process = CrawlerProcess(get_project_settings())
     process.crawl(GearvnHomeSpider)
     process.start()
-    print("End processing")
+    print("End processing.")
     pass
     
 if __name__ == '__main__':

@@ -1,8 +1,7 @@
 import scrapy
 import re
-from scrapy.http import HtmlResponse
 import json
-from urllib.parse import urlencode
+from .Classfication import *
 
 class GearvnHomeSpider(scrapy.Spider):
     name = 'GearvnHome_spider'
@@ -39,7 +38,13 @@ class GearvnHomeSpider(scrapy.Spider):
             )
         
     def parse_product(self, response):
-        product_frame = response.css('.')
-        
+        product_frame = response.css('.container')
+        if not product_frame:
+            return
+        for info in response.css('.page_content'):
+            product_name = (info.css('h1::text').get()[8:])[:-8]
+            type = parse(product_name)
+            details = parse_following_type(type, response)
+            print(details)
         pass
     
