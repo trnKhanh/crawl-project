@@ -11,6 +11,7 @@ from crawler.items import ProductItem
 class TgddSpider(scrapy.Spider):
     name = 'tgdd'
     filter_url = "https://www.thegioididong.com/Category/FilterProductBox?c=<cate_id>&priceminmax=0-1000000&pi=0"
+    parameter_url = "https://www.thegioididong.com/Product/GetGalleryItemInPopup?productId={}&isAppliance=false&galleryType=5&colorId=0"
     urls = [
         # 'https://www.thegioididong.com',
     ]
@@ -20,6 +21,9 @@ class TgddSpider(scrapy.Spider):
         'https://www.thegioididong.com/may-tinh-bang',
         'https://www.thegioididong.com/dtdd',
         'https://www.thegioididong.com/may-tinh-de-ban',
+        'https://www.thegioididong.com/man-hinh-may-tinh',
+        'https://www.thegioididong.com/dong-ho-thong-minh',
+        'https://www.thegioididong.com/chuot-ban-phim',
     ]
     post_data = urlencode({"IsParentCate": False, "IsShowCompare": True, "prevent": True})
 
@@ -89,10 +93,12 @@ class TgddSpider(scrapy.Spider):
     def product_parse(self, response):
         # find product_box
         product_box = response.xpath("//section[contains(@class, 'detail')]")
+
         if not product_box:
             return
-        # get product category id
-        id = int(product_box.xpath("self::*/@data-cate-id").get())
+        # get product and category id
+        category_id = int(product_box.xpath("self::*/@data-cate-id").get())
+        product_id = int(product_box.xpath("self::*/@data-id").get())
 
         product_info = {}
 
@@ -114,31 +120,19 @@ class TgddSpider(scrapy.Spider):
             price = re.sub(r"\D", "", price)
             price = int(price)
         product_info["price"] = price
-
-        # parse product parameter
-        if id in category_parameter:
-            for parameter_name, name_in_web in category_parameter[id].items():
-                if parameter_name.lower() == "disk":
-                    data = ', '.join(filter(None, map(extract_disk, product_box.xpath(parameter_xpath(name_in_web)).getall())))
-                elif parameter_name.lower() == "ram":
-                    data = product_box.xpath(parameter_xpath(name_in_web)).get()
-                elif parameter_name.lower() in ["cpu", "chip"]:
-                    data = ' '.join(product_box.xpath(parameter_xpath(name_in_web)).getall())
-                else:
-                    data = ', '.join(product_box.xpath(parameter_xpath(name_in_web)).getall())
-                
-                if data == '':
-                    data = None
-                product_info[parameter_name] = data
-
+        
         # parse product url
         url = response.request.url
         product_info["url"] = url
 
-        category = get_category_table(id)
+        # pass image url down
         image_urls = [response.meta.get("thumb_image_url")]
 
-        yield ProductItem(category=category, image_urls = image_urls, product_info=product_info)
+        # parse product parameter
+        yield scrapy.Request(url=self.parameter_url.format(product_id), callback=self.parameter_parse, meta=dict(
+            category_id=category_id, image_urls=image_urls, product_info=product_info
+        ))
+        
         # follow the link to other products
         yield from self.product_follow(response)
     
@@ -146,4 +140,26 @@ class TgddSpider(scrapy.Spider):
         for next_page in response.xpath("(//*[@class='box03 group desk'])[1]/a/@href").getall():
             url = response.urljoin(next_page)
             yield scrapy.Request(url=url, callback=self.product_parse, meta=response.meta)
-        
+
+    def parameter_parse(self, response):
+        product_info = response.meta.get("product_info")
+        category_id = response.meta.get("category_id")
+
+        if category_id in category_parameter:
+            for parameter_name, name_in_web in category_parameter[category_id].items():
+                if parameter_name.lower() == "disk":
+                    data = ', '.join(filter(None, map(extract_disk, response.xpath(parameter_xpath(name_in_web)).getall())))
+                elif parameter_name.lower() == "ram":
+                    data = response.xpath(parameter_xpath(name_in_web)).get()
+                elif parameter_name.lower() in ["cpu", "chip"]:
+                    data = ' '.join(response.xpath(parameter_xpath(name_in_web)).getall())
+                else:
+                    data = ', '.join(response.xpath(parameter_xpath(name_in_web)).getall())
+                
+                if data.lower() in ['', 'hãng không công bố', 'không có']:
+                    data = None
+                product_info[parameter_name] = data
+
+        category = get_category_table(category_id)
+        image_urls = response.meta.get("image_urls")
+        yield ProductItem(category=category, image_urls=image_urls, product_info=product_info, website="Thế giới di động")

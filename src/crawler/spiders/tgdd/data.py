@@ -12,7 +12,7 @@ def get_category_table(id):
     if id in category_table:
         return category_table[id]
     else:
-        return "misc"
+        return "other"
     
 category_id = {}
 for id in category_table:
@@ -20,7 +20,7 @@ for id in category_table:
 
 category_parameter = {
     category_id["laptop"]: {
-        "cpu": "CPU",
+        "cpu": "Công nghệ CPU",
         "ram": "RAM",
         "disk": "Ổ cứng",
         "screen": "Màn hình",
@@ -45,25 +45,24 @@ category_parameter = {
         "brand": "Hãng",
     },
     category_id["screen"]: {
-        "screen_type": 'Loại màn hình',
-        "screen_size": 'Màn hình',
+        "screen_size": 'Kích thước màn hình',
     },
     category_id["tablet"]: {
-        "chip": "Chip",
+        "chip": "CPU",
         "ram": "RAM",
         "disk": "Dung lượng lưu trữ",
-        "screen": "Màn hình",
+        "screen": "Màn hình rộng",
         "OS": "Hệ điều hành",
     },
     category_id["phone"]: {
-        "chip": "Chip",
+        "chip": "CPU",
         "ram": "RAM",
         "disk": "Dung lượng lưu trữ",
-        "screen": "Màn hình",
+        "screen": "Màn hình rộng",
         "OS": "Hệ điều hành",
     },
     category_id["smart_watch"]: {
-        "screen": "Màn hình",
+        "screen": "Kích thước màn hình",
         "brand": "Hãng",
     }
 }
