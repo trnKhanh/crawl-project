@@ -1,3 +1,4 @@
+CREATE DATABASE crawl_database;
 USE crawl_database;
 
 CREATE TABLE Tablet(
@@ -10,7 +11,8 @@ CREATE TABLE Tablet(
     Screen NVARCHAR(200),
     OS NVARCHAR(200),
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Tablet_url ON Tablet(url);
 CREATE TABLE Phone(
@@ -23,7 +25,8 @@ CREATE TABLE Phone(
     Screen NVARCHAR(200),
     OS NVARCHAR(200),
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Phone_url ON Phone(url);
 CREATE TABLE Laptop(
@@ -36,7 +39,8 @@ CREATE TABLE Laptop(
     Screen NVARCHAR(200),
     OS NVARCHAR(200),
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Laptop_url ON Laptop(url);
 CREATE TABLE PC(
@@ -49,17 +53,18 @@ CREATE TABLE PC(
     Screen NVARCHAR(200),
     OS NVARCHAR(200),
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_PC_url ON PC(url);
 CREATE TABLE Screen(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
     Price INT,
-    Screen_type NVARCHAR(200),
     Screen_size NVARCHAR(200),
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Screen_url ON Screen(url);
 CREATE TABLE Mouse(
@@ -70,7 +75,8 @@ CREATE TABLE Mouse(
     Connect_type NVARCHAR(200),
     Brand NVARCHAR(200),
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Mouse_url ON Mouse(url);
 CREATE TABLE Keyboard(
@@ -82,7 +88,8 @@ CREATE TABLE Keyboard(
     Size NVARCHAR(200),
     Brand NVARCHAR(200),
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Keyboard_url ON Keyboard(url);
 CREATE TABLE Smart_watch(
@@ -92,7 +99,8 @@ CREATE TABLE Smart_watch(
     Screen NVARCHAR(200),
     Brand NVARCHAR(200),
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Smart_watch_url ON Smart_watch(url);
 CREATE TABLE Other(
@@ -100,6 +108,7 @@ CREATE TABLE Other(
     name NVARCHAR(200),
     price INT,
     url NVARCHAR(200),
-    image_path NVARCHAR(200)
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Other_url ON Other(url);
