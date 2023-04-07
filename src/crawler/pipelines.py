@@ -34,17 +34,23 @@ class SQLPipeline:
         self.db.commit()
         
     def process_item(self, item, spider):
-        column_names = (', '.join(item["product_info"].keys()) + ', image_path')
+        column_names = (', '.join(item["product_info"].keys()) + ', image_path' + ', website')
         sql = f"""
             INSERT INTO {item["category"]} ({column_names}) 
-            VALUES ({("%s," * (len(item["product_info"]) + 1)).strip(',')})
+            VALUES ({("%s," * (len(item["product_info"]) + 2)).strip(',')})
             ON DUPLICATE KEY UPDATE id=id
         """
         # print(sql)
         new_row = list(item["product_info"].values())
 
-        for image_path in item["image_paths"]:
-            new_row.append(image_path)
-            
+        if "image_paths" in item:
+            for image_path in item["image_paths"]:
+                new_row.append(image_path)
+        else:
+            new_row.append(None)
+        
+        new_row.append(item["website"])
+        # print(sql)
+        # print(new_row)
         self.cursor.execute(sql, new_row)
         return item

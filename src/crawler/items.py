@@ -10,3 +10,4 @@ class ProductItem(scrapy.Item):
     image_urls = scrapy.Field()
     product_info = scrapy.Field()
     image_paths = scrapy.Field()
+    website = scrapy.Field()
