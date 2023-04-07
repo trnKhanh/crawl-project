@@ -1,5 +1,4 @@
 import scrapy
-import re
 import json
 from .Classfication import *
 
@@ -45,6 +44,7 @@ class GearvnHomeSpider(scrapy.Spider):
             product_name = (info.css('h1::text').get()[8:])[:-8]
             type = parse(product_name)
             details = parse_following_type(type, response)
+            print(product_name)
             print(details)
         pass
     
