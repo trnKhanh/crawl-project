@@ -101,7 +101,7 @@ def filter_product(table_name: str, filters = {}, page_index: int = 0, product_p
         sort_type = 0
     
     sql = f"""
-    SELECT name, price, url, image_path
+    SELECT name, price, url, image_path, website
     FROM {table_name}
     WHERE name IS NOT NULL AND price IS NOT NULL AND url IS NOT NULL
     """
@@ -135,7 +135,8 @@ def filter_product(table_name: str, filters = {}, page_index: int = 0, product_p
     }
     start_index = min(len(rows), page_index * product_per_page)
     end_index = min(len(rows), start_index + product_per_page)
-
+    print(start_index)
+    print(end_index)
     listproduct = []
     for row in rows[start_index:end_index]:
         product = {
@@ -143,6 +144,7 @@ def filter_product(table_name: str, filters = {}, page_index: int = 0, product_p
             "price": '{:0,}'.format(row[1]).replace(",", ".") + " đ", 
             "url": row[2],
             "image_path": row[3],
+            "website": row[4],
         }
         listproduct.append(product)
     # product_info["listproduct"] = listproduct

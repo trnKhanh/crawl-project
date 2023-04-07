@@ -93,7 +93,8 @@ function loadPaging()
             if (currentPage !== item)
             {
                 let pageId = parseInt(item.innerHTML) - 1;
-                let response = await fetch(`/filterProduct?c=${category.replace(" ", "-")}&pi=${pageId}`, {
+                let sortType = document.querySelector(".sort-type").value;
+                let response = await fetch(`/filterProduct?c=${category.replace(" ", "-")}&pi=${pageId}&sort-type=${sortType}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
