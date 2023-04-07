@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = "crawler.spiders"
 
 # Log file
 LOG_FILE = '1_TGDD.log'
-LOG_FILE_APPEND = True
+LOG_FILE_APPEND = False
 
 # feed
 # FEEDS = {
@@ -37,7 +37,11 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
-
+DOWNLOAD_HANDLERS = {
+    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+}
+TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
