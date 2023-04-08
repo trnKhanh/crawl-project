@@ -11,7 +11,8 @@ type_product = {
     "Bộ định tuyến": 8,
     "Router": 8,
     "Webcam": 9,
-    "Other" : 10,
+    "SSD": 10,
+    "Other" : 11,
 }
 
 category_parameter = {
@@ -58,6 +59,10 @@ category_parameter = {
     type_product["Webcam"]:{
         "brand": ["Thương hiệu"],
         "compatible": ["Tương thích"],
+    },
+    type_product["SSD"]:{
+        "brand": ["Thương hiệu"],
+        "size": ["Mức dung lượng"],  
     },
     type_product["Other"]: {
         "brand": ["Thương hiệu", "Hãng sản xuất"]
