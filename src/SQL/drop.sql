@@ -1,0 +1,11 @@
+USE crawl_database;
+
+DROP TABLE Laptop
+DROP TABLE PC
+DROP TABLE Screen
+DROP TABLE Mouse
+DROP TABLE Keyboard
+DROP TABLE Earphone
+DROP TABLE Router
+DROP TABLE LoudSpeaker
+DROP TABLE Other
