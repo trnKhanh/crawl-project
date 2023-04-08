@@ -7,9 +7,11 @@ type_product = {
     "Chuột" : 5,
     "Tai nghe": 6,
     "Loa": 7,
+    "Earphone": 7,
     "Bộ định tuyến": 8,
     "Router": 8,
-    "Other" : 9,
+    "Webcam": 9,
+    "Other" : 10,
 }
 
 category_parameter = {
@@ -33,7 +35,7 @@ category_parameter = {
         "brand": ["Thương hiệu"],
     },
     type_product["Chuột"]: {
-        "dpi": ["Độ nhạy"],
+        "dpi": ["Độ nhạy", "Độ phân giải"],
         "connect_type": ["Kiểu kết nối"],
         "brand": ["Hãng sản xuất"],
     },
@@ -47,10 +49,15 @@ category_parameter = {
     },
     type_product["Loa"]: {
         "brand": ["Thương hiệu", "Hãng sản xuất"],
+        "connect_type": ["Giao tiếp"],
     },
     type_product["Bộ định tuyến"]: {
         "brand": ["Thương hiệu"],
         "bandwidth": ["Băng tần mạng"],
+    },
+    type_product["Webcam"]:{
+        "brand": ["Thương hiệu"],
+        "compatible": ["Tương thích"],
     },
     type_product["Other"]: {
         "brand": ["Thương hiệu", "Hãng sản xuất"]

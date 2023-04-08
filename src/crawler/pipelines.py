@@ -6,8 +6,10 @@
 
 # useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
-
-
+from scrapy.exceptions import DropItem
+from scrapy.pipelines.images import ImagesPipeline
+import scrapy
+import mysql.connector
 class CrawlerPipeline:
     def process_item(self, item, spider):
         return item
