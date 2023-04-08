@@ -6,11 +6,11 @@ def parse(name_product):
         check = re.search(f"^{type}.*",name_product)
         if check:
             return type_product[type]
-    return 9 #Unknown
+    return type_product["Other"] #Unknown
 
 def parse_following_type(type, response):
     dict = {}
-    if type == 7:
+    if type == type_product["Other"]:
         return dict
     div = response.xpath('//div[@id="chitiet"]')[0]
     level = [0*"/*", 1*"/*", 2*"/*", 3*"/*", 4*"/*", 5*"/*"]

@@ -1,6 +1,6 @@
 import scrapy
 import json
-from .Classfication import *
+from .ClassficationGearvn import *
 
 class GearvnHomeSpider(scrapy.Spider):
     name = 'GearvnHome_spider'
