@@ -53,21 +53,36 @@ class TgddSpider(scrapy.Spider):
         # "https://fptshop.com.vn/phu-kien/chuot-khong-day-targus-w600",
         # "https://fptshop.com.vn/smartwatch/apple-watch-ultra-gps-cellular-49mm-alpine-loop-small",
         # "https://fptshop.com.vn/may-tinh-de-ban/pc-frt-e-power-006",
-        "https://fptshop.com.vn/phu-kien/apple-tv-2022-4k-ethernet-128gb"
+        # "https://fptshop.com.vn/phu-kien/apple-tv-2022-4k-ethernet-128gb",
+        "https://fptshop.com.vn/dien-thoai/iphone-14-pro-max",
+        "https://fptshop.com.vn/dien-thoai/samsung-galaxy-s22"
     ]
 
     def start_requests(self):
         # crawl root (contains categories' links)
-        for url in self.urls:
-            yield scrapy.Request(url=url, callback=self.parse, meta=dict(playwright=True))
+        # for url in self.urls:
+        #     yield scrapy.Request(url=url, callback=self.parse, meta=dict(playwright=True))
         # scrape "linh kien may tinh"
         # yield scrapy.Request(url=self.loadmore_url.format(1), callback=self.loadmore_parse)
+
+        for url in self.product_urls:
+            yield scrapy.Request(url=url, callback=self.product_parse_type_1, meta=dict(
+                playwright=True,
+                playwright_page_methods=[
+                    PageMethod("wait_for_selector", "div.l-pd", timeout=10 * 1000, state='attached'),
+                    PageMethod("wait_for_selector", "div.st-slider img", timeout=10 * 1000, state='attached'),
+                    PageMethod("wait_for_selector", "ol.breadcrumb > li:nth-child(2)", timeout=10 * 1000, state='attached'),
+                    PageMethod("wait_for_selector", ".st-pd-table-viewDetail > a", timeout=10 * 1000, state='attached'),
+                    PageMethod("click", ".st-pd-table-viewDetail > a")
+                ],
+                name=None,
+            ))
 
     # parse categories link from roots
     def parse(self, response):
         for category in response.xpath("//*[contains(@class, 'st-cate') or contains(@class, 'chapter-list') or contains(@class, 'characters home')]/descendant::a"):
             url = f'{response.urljoin(category.xpath("@href").get())}?trang=1000000'
-            print(url)
+
             yield scrapy.Request(url=url, callback=self.category_parse_type_1, errback=self.to_type_2, meta=dict(
                 playwright=True,
                 playwright_page_methods=[
@@ -150,16 +165,41 @@ class TgddSpider(scrapy.Spider):
                 name=name,
             ))
     
+    # parse loadmore API when proccessing pc parts
+    def loadmore_parse(self, response):
+        data = json.loads(response.text)
+        category_box = HtmlResponse(url="https://fptshop.com.vn/", body=data['product'], encoding="utf-8")
+        # send data to category_parse_type_3 to parse
+        yield from self.category_parse_type_3(category_box)
+
+        page_id = re.search(r'(?<=PageIndex=)\d*',response.request.url)
+        if page_id:
+            page_id = int(page_id.group())
+        else:
+            page_id = 0
+
+        # if there are more products, request more
+        if data['totalrest'] > 0:
+            yield scrapy.Request(url=self.loadmore_url.format(page_id + 1), callback=self.loadmore_parse)
+    
     # parse products in laptop, phone, tablet, accessories, e.t.c
     def product_parse_type_1(self, response):
         product_box = response.css("div.l-pd")
+
+        if "from_follow" not in response.meta and product_box.xpath("descendant::*[contains(concat(' ', normalize-space(@class),' '), ' st-select ')]/*"):
+            yield from self.follow_product_type_1(response)
+            return
         # parse category
         category_breadcrumb = " ".join(product_box.xpath("//*[contains(@class, 'breadcrumb-item')][not(contains(@class, 'active'))]/*/text()").getall())
         category = get_category_table(category_breadcrumb)
 
         product_info = {}
         # parse product name
-        name = response.meta.get("name").strip()
+        name = response.meta.get("name")
+        if not name:
+            name = product_box.xpath("descendant::*[contains(@class, 'st-name')]/text()").get()
+        name = name.strip()
+
         product_info["name"] = name
         # parse and normalize price
         price = product_box.xpath('descendant::*[contains(@class, "st-price-main")]/text()').get()
@@ -181,8 +221,10 @@ class TgddSpider(scrapy.Spider):
                 if data.lower() in ['']:
                     data = None
                 product_info[parameter_name] = data
-        
+
         yield ProductItem(category=category, image_urls=image_urls, product_info=product_info, website="FPT")
+
+        yield from self.follow_product_type_1(response)
 
     # parse products in pc parts
     def product_parse_type_2(self, response):
@@ -216,22 +258,21 @@ class TgddSpider(scrapy.Spider):
         
         yield ProductItem(category=category, image_urls=image_urls, product_info=product_info, website="FPT")
     
-    # parse loadmore API when proccessing pc parts
-    def loadmore_parse(self, response):
-        data = json.loads(response.text)
-        category_box = HtmlResponse(url="https://fptshop.com.vn/", body=data['product'], encoding="utf-8")
-        # send data to category_parse_type_3 to parse
-        yield from self.category_parse_type_3(category_box)
-
-        page_id = re.search(r'(?<=PageIndex=)\d*',response.request.url)
-        if page_id:
-            page_id = int(page_id.group())
-        else:
-            page_id = 0
-
-        print(page_id)
-        # if there are more products, request more
-        if data['totalrest'] > 0:
-            yield scrapy.Request(url=self.loadmore_url.format(page_id + 1), callback=self.loadmore_parse)
+    def follow_product_type_1(self, response):
+        for product in response.xpath("descendant::*[contains(concat(' ', normalize-space(@class),' '), ' st-select ')]/*"):
+            url = response.urljoin(product.xpath("@href").get())
+            yield scrapy.Request(url=url, callback=self.product_parse_type_1, meta=dict(
+                playwright=True,
+                playwright_page_methods=[
+                    PageMethod("wait_for_selector", "div.l-pd", timeout=10 * 1000, state='attached'),
+                    PageMethod("wait_for_selector", "div.st-slider img", timeout=10 * 1000, state='attached'),
+                    PageMethod("wait_for_selector", "ol.breadcrumb > li:nth-child(2)", timeout=10 * 1000, state='attached'),
+                    PageMethod("wait_for_selector", ".st-pd-table-viewDetail > a", timeout=10 * 1000, state='attached'),
+                    PageMethod("click", ".st-pd-table-viewDetail > a")
+                ],
+                name=None,
+                from_follow=1,
+            ))
+        pass
 
         
