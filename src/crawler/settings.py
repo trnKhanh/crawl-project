@@ -22,7 +22,7 @@ LOG_FILE_APPEND = False
 # }
 
 # DUPEFILTER
-DUPEFILTER_CLASS = 'crawler.duplicate_filter.CustomFilter'
+# DUPEFILTER_CLASS = 'crawler.duplicate_filter.CustomFilter'
 # DUPEFILTER_DEBUG = True
 
 # Pipe line
