@@ -57,13 +57,13 @@ disk_unit_rate = {
     "GB": 1024*1024*1024,
     "TB": 1024*1024*1024*1024,
 }
-vietnamese_charset = "àáâãèéêìíòóôõùúýỳỹỷỵựửữừứưụủũợởỡờớơộổỗồốọỏịỉĩệểễềếẹẻẽặẳẵằắăậẩẫầấạảđabcdeghiklmnopqrstuvxy"
+vietnamese_charset = "àáâãèéêìíòóôõùúýỳỹỷỵựửữừứưụủũợởỡờớơộổỗồốọỏịỉĩệểễềếẹẻẽặẳẵằắăậẩẫầấạảđabcdeghiklmnopqrstuvxy0123456789"
 def upper_text_xpath():
     return f"translate(text(), '{vietnamese_charset.lower()}','{vietnamese_charset.upper()}')"
 def lower_text_xpath():
     return f"translate(text(),'{vietnamese_charset.upper()}','{vietnamese_charset.lower()}')"
 def contain_word_xpath():
-    return f'translate(text(),translate(text(),"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",""),"")'
+    return f'translate(text(),translate(text(),"{vietnamese_charset.upper()}{vietnamese_charset.lower()}",""),"")'
 def parameter_xpath(parameter_name):
     parameter_name = parameter_name.lower()
     return f'(descendant-or-self::*[contains(@class, "parameter")]/descendant::li/*[1][descendant-or-self::*[contains({lower_text_xpath()}, "{parameter_name}")]])[1]/following-sibling::*[1]/descendant::*[{contain_word_xpath()}]/text()'

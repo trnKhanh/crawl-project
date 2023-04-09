@@ -111,6 +111,7 @@ class TgddSpider(scrapy.Spider):
         else:
             to_remove = len(name)
         name = name[:to_remove]
+        name = name.strip()
         product_info["name"] = name
 
         # product price
@@ -155,7 +156,7 @@ class TgddSpider(scrapy.Spider):
                     data = ' '.join(response.xpath(parameter_xpath(name_in_web)).getall())
                 else:
                     data = ', '.join(response.xpath(parameter_xpath(name_in_web)).getall())
-                
+                data = data.strip()
                 if data.lower() in ['', 'hãng không công bố', 'không có']:
                     data = None
                 product_info[parameter_name] = data
