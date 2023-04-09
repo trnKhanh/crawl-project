@@ -20,6 +20,9 @@ def should_abort_request(request):
     )
 
 class TgddSpider(scrapy.Spider):
+    PLAYWRIGHT_LAUNCH_OPTIONS = {
+        "timeout": 60 * 1000,  # 60 seconds
+    }
     custom_settings = dict(
         PLAYWRIGHT_ABORT_REQUEST=should_abort_request,
     )
