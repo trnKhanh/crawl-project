@@ -23,7 +23,7 @@ if __name__ == '__main__':
         os.remove('text/items.jsonl')
     if os.path.isfile('1_TGDD.log'):
         os.remove('1_TGDD.log')
-    delete_data()
+    # delete_data()
     process = CrawlerProcess(get_project_settings()) 
     process.crawl(TgddSpider)
     # d = process.join()
