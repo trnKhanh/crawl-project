@@ -13,7 +13,7 @@ SPIDER_MODULES = ["crawler.spiders"]
 NEWSPIDER_MODULE = "crawler.spiders"
 
 # Log file
-LOG_FILE = 'GEARVN.log'
+LOG_FILE = 'Gearvn.log'
 LOG_FILE_APPEND = False
 
 # feed
@@ -27,14 +27,14 @@ LOG_FILE_APPEND = False
 
 # Pipe line
 ITEM_PIPELINES ={
-    # 'crawler.pipelines.CustomImagePipeline': 1,
+    'crawler.pipelines.CustomImagePipeline': 1,
     #'crawler.pipelines.SQLPipeline': 2,
     'crawler.pipelines.CrawlerPipeline' : 3,
 }
-# IMAGES_STORE = 'web/static/images'
+IMAGES_STORE = 'web/static/images'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -42,7 +42,7 @@ ROBOTSTXT_OBEY = True
 #     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 #     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 # }
-# TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 

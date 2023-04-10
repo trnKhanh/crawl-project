@@ -2,6 +2,7 @@ import scrapy
 import json
 from .GearvnData import *
 from .GearvnUtils import *
+from crawler.items import ProductItem
 
 class GearvnHomeSpider(scrapy.Spider):
     name = 'GearvnHome_spider'
@@ -73,7 +74,10 @@ class GearvnHomeSpider(scrapy.Spider):
                 dict[product_parameter] = response.xpath(Myxpath).get()
                 if dict[product_parameter] != None:
                     break
-        print(dict)
-        print()
+        #print(dict)
+        #print()
+        yield ProductItem(category=category_table,
+                          product_info=dict,
+                          website="Gearvn")
     
     
