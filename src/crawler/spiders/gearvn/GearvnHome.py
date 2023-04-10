@@ -62,10 +62,13 @@ class GearvnHomeSpider(scrapy.Spider):
                 "image_urls" : image_urls,
                 "product_urls" : product_urls,
             }
-            for product_parameter in category_parameter[category_table]:
+            
+            for product_parameter, product_parameter_alias in category_parameter[category_table].items():
+                #print(product_parameter)
                 dict[product_parameter] = None
-                for alias in product_parameter:
-                    dict[product_parameter] = response.xpath(parameter_xpath(alias)).get()
+                for alias in product_parameter_alias:
+                    Myxpath = parameter_xpath(alias)
+                    dict[product_parameter] = response.xpath(Myxpath).get()
                     if dict[product_parameter] != None:
                         break
             print(dict)
