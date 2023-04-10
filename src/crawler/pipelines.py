@@ -32,7 +32,6 @@ class SQLPipeline:
             user="root",
             password="22042003",
             database="crawl_database",
-            auth_plugin = "22042003"
         )
         self.cursor = self.db.cursor()
 
