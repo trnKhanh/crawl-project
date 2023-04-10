@@ -3,12 +3,12 @@ import os
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from crawler.spiders.gearvn.spider import GearvnHomeSpider
+from crawler.spiders.gearvn.spider import GearvnSpider
 
 def crawling():
     print("Crawling...")
     process = CrawlerProcess(get_project_settings())
-    process.crawl(GearvnHomeSpider)
+    process.crawl(GearvnSpider)
     process.start()
     print("End processing.")
     pass

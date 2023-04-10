@@ -23,12 +23,13 @@ class GearvnHomeSpider(scrapy.Spider):
         #     yield scrapy.Request(url=url, callback=self.parse_category)
             
     def parse(self, response):
-        for link in response.xpath("//body/header/descendant::a/@href").getall():
+        for link in response.xpath('descendant::div[contain(@class, "menu-tree")]/child::*[1]/@href').get():
             url = response.urljoin(link)
-            if url[-4:] == '-ldp':
-                url = url[:-4]
-            if 'https://cellphones.com.vn/' in url:
-                yield scrapy.Request(url=url, callback=self.parse_category)
+            print(url)
+            # if url[-4:] == '-ldp':
+            #     url = url[:-4]
+            # if 'https://cellphones.com.vn/' in url:
+            #     yield scrapy.Request(url=url, callback=self.parse_category)
 
     
     def parse_category(self, response):

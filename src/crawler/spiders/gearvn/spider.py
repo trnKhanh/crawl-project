@@ -4,7 +4,7 @@ from .data import *
 from .utils import *
 from crawler.items import ProductItem
 
-class GearvnHomeSpider(scrapy.Spider):
+class GearvnSpider(scrapy.Spider):
     name = 'GearvnHome_spider'
     start_urls = ['https://gearvn.com']
     
