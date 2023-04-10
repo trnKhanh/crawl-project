@@ -37,12 +37,13 @@ class GearvnHomeSpider(scrapy.Spider):
             
             thumb_nail_product = product.xpath('descendant::img[contains(@class, "thumbnail")]/@src').get()
             thumb_nail_product = response.urljoin(thumb_nail_product)
-
+            
             yield scrapy.Request(
                 url=response.urljoin(product_link),
                 callback=self.parse_product,
                 meta=dict(product_url = product_link,
-                          thumbnail_image=thumb_nail_product),
+                          thumbnail_image=thumb_nail_product,
+                )
             )
         
     def parse_product(self, response):
@@ -53,25 +54,26 @@ class GearvnHomeSpider(scrapy.Spider):
         # get image
         image_urls = [response.meta.get("thumbnail_image")]
         product_urls = [response.meta.get("product_url")]
-        for info in response.css('.page_content'):
-            product_name = (info.css('h1::text').get()[8:])[:-8]
-            category_table = get_category_table(product_name)
+        #price = [response.meta.get("product_price")]
+        price = response.xpath('descendant::span[contains(@class, "product_sale_price")]/text()').get()[:-3]
+        product_name = (response.css('.page_content').css('h1::text').get()[8:])[:-8]
+        category_table = get_category_table(product_name)
+        dict={
+            "product_name" : product_name,
+            "price" : price_to_int(price),
+            "image_urls" : image_urls,
+            "product_urls" : product_urls,
+        }
             
-            dict={
-                "product_name" : product_name,
-                "image_urls" : image_urls,
-                "product_urls" : product_urls,
-            }
-            
-            for product_parameter, product_parameter_alias in category_parameter[category_table].items():
-                #print(product_parameter)
-                dict[product_parameter] = None
-                for alias in product_parameter_alias:
-                    Myxpath = parameter_xpath(alias)
-                    dict[product_parameter] = response.xpath(Myxpath).get()
-                    if dict[product_parameter] != None:
-                        break
-            print(dict)
-            print()
+        for product_parameter, product_parameter_alias in category_parameter[category_table].items():
+            #print(product_parameter)
+            dict[product_parameter] = None
+            for alias in product_parameter_alias:
+                Myxpath = parameter_xpath(alias)
+                dict[product_parameter] = response.xpath(Myxpath).get()
+                if dict[product_parameter] != None:
+                    break
+        print(dict)
+        print()
     
     
