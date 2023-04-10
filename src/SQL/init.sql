@@ -1,6 +1,34 @@
 CREATE DATABASE crawl_database;
 USE crawl_database;
 
+CREATE TABLE Tablet(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    Name NVARCHAR(200),
+    Price INT,
+    Chip NVARCHAR(200),
+    RAM NVARCHAR(200),
+    Disk NVARCHAR(200),
+    Screen NVARCHAR(200),
+    OS NVARCHAR(200),
+    url NVARCHAR(200),
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
+);
+CREATE UNIQUE INDEX unique_Tablet_url ON Tablet(url);
+CREATE TABLE Phone(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    Name NVARCHAR(200),
+    Price INT,
+    Chip NVARCHAR(200),
+    RAM NVARCHAR(200),
+    Disk NVARCHAR(200),
+    Screen NVARCHAR(200),
+    OS NVARCHAR(200),
+    url NVARCHAR(200),
+    image_path NVARCHAR(200),
+    website NVARCHAR(200)
+);
+CREATE UNIQUE INDEX unique_Phone_url ON Phone(url);
 CREATE TABLE Laptop(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
@@ -64,39 +92,17 @@ CREATE TABLE Keyboard(
     website NVARCHAR(200)
 );
 CREATE UNIQUE INDEX unique_Keyboard_url ON Keyboard(url);
-CREATE TABLE Earphone(
+CREATE TABLE Smart_watch(
     id INT PRIMARY KEY AUTO_INCREMENT,
     Name NVARCHAR(200),
     Price INT,
-    Compatible NVARCHAR(200),
-    Connect_type NVARCHAR(200),
+    Screen NVARCHAR(200),
     Brand NVARCHAR(200),
     url NVARCHAR(200),
     image_path NVARCHAR(200),
     website NVARCHAR(200)
 );
-CREATE UNIQUE INDEX unique_Earphone_url ON Earphone(url);
-CREATE TABLE Router(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    Name NVARCHAR(200),
-    Price INT,
-    Bandwidth NVARCHAR(200),
-    Brand NVARCHAR(200),
-    url NVARCHAR(200),
-    image_path NVARCHAR(200),
-    website NVARCHAR(200)
-);
-CREATE UNIQUE INDEX unique_Router_url ON Router(url);
-CREATE TABLE LoudSpeaker(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    Name NVARCHAR(200),
-    Price INT,
-    Brand NVARCHAR(200),
-    url NVARCHAR(200),
-    image_path NVARCHAR(200),
-    website NVARCHAR(200)
-);
-CREATE UNIQUE INDEX unique_LoudSpeaker_url ON LoudSpeaker(url);
+CREATE UNIQUE INDEX unique_Smart_watch_url ON Smart_watch(url);
 CREATE TABLE Other(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name NVARCHAR(200),

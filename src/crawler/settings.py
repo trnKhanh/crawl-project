@@ -12,13 +12,37 @@ BOT_NAME = "crawler"
 SPIDER_MODULES = ["crawler.spiders"]
 NEWSPIDER_MODULE = "crawler.spiders"
 
-LOG_FILE = "gearvn.log"
+# Log file
+LOG_FILE = 'GEARVN.log'
+LOG_FILE_APPEND = False
+
+# feed
+# FEEDS = {
+#     'text/items.jsonl': {'format': 'jsonl'}
+# }
+
+# DUPEFILTER
+# DUPEFILTER_CLASS = 'crawler.duplicate_filter.CustomFilter'
+# DUPEFILTER_DEBUG = True
+
+# Pipe line
+ITEM_PIPELINES ={
+    # 'crawler.pipelines.CustomImagePipeline': 1,
+    #'crawler.pipelines.SQLPipeline': 2,
+    'crawler.pipelines.CrawlerPipeline' : 3,
+}
+# IMAGES_STORE = 'web/static/images'
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = "crawler (+http://www.yourdomain.com)"
+#USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
-
+# DOWNLOAD_HANDLERS = {
+#     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+#     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+# }
+# TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 

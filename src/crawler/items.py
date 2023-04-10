@@ -5,7 +5,10 @@
 
 import scrapy
 class ProductItem(scrapy.Item):
-    category = scrapy.Field()
-    image_urls = scrapy.Field()
-    product_info = scrapy.Field()
-    image_paths = scrapy.Field()
+    category = scrapy.Field() # table_name in sql
+    image_urls = scrapy.Field() # array
+    product_info = scrapy.Field() # parameter(include name, price, url, and other parameters (e.g cpu, ram,...))
+    image_paths = scrapy.Field() # do not care about
+    website = scrapy.Field() # set this to the web you crawl
+
+# image_urls = [response.urljoin(link)]

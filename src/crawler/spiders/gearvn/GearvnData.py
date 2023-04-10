@@ -1,99 +1,65 @@
-type_product = {
-    "Laptop" : 1,
-    "Macbook": 1,
-    "Màn hình" : 2,
-    "GVN" : 3,
-    "Bàn phím" : 4,
-    "Chuột" : 5,
-    "Tai nghe": 6,
-    "Loa": 7,
-    "Earphone": 8,
-    "Tai nghe": 8,
-    "Bộ định tuyến": 9,
-    "Router": 10,
-    "Webcam": 11,
-    "SSD": 12,
-    "HDD": 13,
-    "Micro": 14,
-    "Other" : 15,
-}
+import regex as re
 
+def get_category_table(name):
+    name = name.lower()
+    if re.match(r'gvn.*', name):
+        return "PC"
+    elif re.match(r'laptop.*', name):
+        return "Laptop"
+    elif re.match(r'macbook.*', name):
+        return "Laptop"
+    elif re.match(r'bàn phím.*', name):
+        return "Keyboard"
+    elif re.match(r'chuột.*', name):
+        return "Mouse"
+    elif re.match(r'màn hình.*', name):
+        return "Screen"
+    else:
+        return "Other"
+    
 alias_parameter = {
-    "bandwidth": ["Băng tần mạng"],
     "brand": ["Thương hiệu", "Hãng sản xuất", "Nhà sản xuất", "Hãng"],
     "connect_type": ["Kiểu kết nối", "Kết nối", "Giao tiếp"],
     "compatible": ["Tương thích"],
-    "compatible_micro": ["Tương thích", "Hệ điều hành"],
     "cpu": ["CPU"],
     "disk": ["Ổ lưu trữ", "Ổ cứng", "SSD", "HDD"],
     "dpi" : ["Độ nhạy", "Độ phân giải", "DPI"],
     "size_keyboard": ["Layout", "Số phím"],
     "size_screen": ["Kích thước"],
-    "size_utils": ["Mức dung lượng"],
-    "OS": ["Hệ điều hành"],
-    "ram": ["RAM", "ram", "Ram"],
+    "os": ["Hệ điều hành"],
+    "ram": ["ram"],
     "screen": ["Màn hình"],
-    "type_earphone": ["Kiểu tai nghe"],
 }
 
 category_parameter = {
-    type_product["Laptop"]: {
+    "Laptop": {
         "cpu": alias_parameter["cpu"],
         "disk": alias_parameter["disk"],
-        "OS": alias_parameter["OS"],
+        "OS": alias_parameter["os"],
         "ram": alias_parameter["ram"],
         "screen": alias_parameter["screen"],
     },
-    type_product["GVN"]: {
-        "cpu": ["CPU"],
-        "ram": ["RAM"],
-        "disk": ["SSD"],
-        "OS": ["Hệ điều hành"],
+    "PC": {
+        "cpu": alias_parameter["cpu"],
+        "ram": alias_parameter["ram"],
+        "disk": alias_parameter["disk"],
+        "OS": alias_parameter["os"],
     },
-    type_product["Bàn phím"]: {
+    "Keyboard": {
         "brand": alias_parameter["brand"],
         "compatible": alias_parameter["compatible"],
         "connect_type": alias_parameter["connect_type"],
         "size": alias_parameter["size_keyboard"],
     },
-    type_product["Chuột"]: {
+    "Mouse": {
         "brand": alias_parameter["brand"],
         "connect_type": alias_parameter["connect_type"],
         "dpi": alias_parameter["dpi"],
     },
-    type_product["Màn hình"]: {
+    "Screen": {
         "screen_size": alias_parameter["size_screen"],
     },
-    type_product["Tai nghe"]: {
-        "brand": alias_parameter["brand"],
-        "connect_type": alias_parameter["connect_type"],
-        "type": alias_parameter["type_earphone"],
-    },
-    type_product["Loa"]: {
-        "brand": alias_parameter["brand"],
-        "connect_type": alias_parameter["connect_type"],
-    },
-    type_product["Bộ định tuyến"]: {
-        "brand": alias_parameter["brand"],
-        "bandwidth": alias_parameter["bandwidth"],
-    },
-    type_product["Webcam"]:{
-        "brand": alias_parameter["brand"],
-        "compatible": alias_parameter["compatible"],
-    },
-    type_product["Micro"]:{
-        "brand": alias_parameter["brand"],
-        "compatible": alias_parameter["compatible_micro"],
-    },
-    type_product["SSD"]:{
-        "brand": alias_parameter["brand"],
-        "size": alias_parameter["size_utils"],  
-    },
-    type_product["HDD"]:{
-        "brand": alias_parameter["brand"],
-        "size": alias_parameter["size_utils"],  
-    },
-    type_product["Other"]: {
+    "Other": {
         "brand": alias_parameter["brand"],
     }
 }
