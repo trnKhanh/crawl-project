@@ -1,34 +1,35 @@
 import regex as re
 
-def get_category_table(name):
-    name = name.lower()
-    if re.match(r'samsung.*', name):
-        return "Phone"
-    elif re.match(r'xiaomi.*', name):
-        return "Laptop"
-    elif re.match(r'iphone.*', name):
-        return "Laptop"
-    elif re.match(r'oppo.*', name):
-        return "Keyboard"
-    elif re.match(r'chuột.*', name):
-        return "Mouse"
-    elif re.match(r'màn hình.*', name):
-        return "Screen"
+# div.id
+category_table = {
+    "542lp90LP": "laptop",
+    "YBPdfL8u8": "PC",
+    "criteo-tags-div": "keyboard",
+    "DneOAgAQr": "mouse",
+    "duhUiJSKJ": "screen",
+    "M_fpGirLP": "tablet",
+    "9D9j1kQsZ": "phone",
+    "Jv83PBoWm": "smart_watch"
+}
+
+def get_category_table(id):
+    if id in category_table:
+        return category_table[id]
     else:
-        return "Other"
+        return "other"
     
 alias_parameter = {
-    "brand": ["Thương hiệu", "Hãng sản xuất", "Nhà sản xuất", "Hãng"],
-    "connect_type": ["Kiểu kết nối", "Kết nối", "Giao tiếp"],
+    "brand": ["Hãng sản xuất"],
+    "connect_type": ["Cách kết nối", "Kết nối"],
     "compatible": ["Tương thích"],
-    "cpu": ["CPU"],
+    "cpu": ["CPU", "Loại CPU"],
     "chip": ["chipset"],
-    "disk": ["Ổ lưu trữ", "Ổ cứng", "Bộ nhớ trong"],
-    "dpi" : ["Độ nhạy", "Độ phân giải", "DPI"],
-    "size_keyboard": ["Layout", "Số phím"],
+    "disk": ["Bộ nhớ trong", "Ổ cứng"],
+    "dpi" : ["Độ phân giải"],
+    "size_keyboard": ["Kích thước bàn phím"],
     "size_screen": ["Kích thước màn hình"],
     "os": ["Hệ điều hành"],
-    "ram": ["ram", "Dung lượng ram"],
+    "ram": ["Dung lượng Ram"],
     "screen": ["Màn hình"],
 }
 
@@ -51,6 +52,7 @@ category_parameter = {
         "cpu": alias_parameter["cpu"],
         "ram": alias_parameter["ram"],
         "disk": alias_parameter["disk"],
+        "screen": alias_parameter["size_screen"],
         "OS": alias_parameter["os"],
     },
     "Keyboard": {
@@ -67,7 +69,11 @@ category_parameter = {
     "Screen": {
         "screen_size": alias_parameter["size_screen"],
     },
-    "Other": {
+    "smart_watch":{ 
+        "brand": alias_parameter["brand"],
+        "size_screen": alias_parameter["size_screen"]
+    },
+    "Other": { 
         "brand": alias_parameter["brand"],
     }
 }

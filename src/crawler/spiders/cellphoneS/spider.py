@@ -4,7 +4,7 @@ from .data import *
 from .utils import *
 from crawler.items import ProductItem
 
-class GearvnHomeSpider(scrapy.Spider):
+class CellphoneSSpider(scrapy.Spider):
     name = 'CellPhoneS_spider'
     urls = ['https://cellphones.com.vn/']
 
@@ -23,16 +23,14 @@ class GearvnHomeSpider(scrapy.Spider):
         #     yield scrapy.Request(url=url, callback=self.parse_category)
             
     def parse(self, response):
-        for link in response.xpath('descendant::div[contain(@class, "menu-tree")]/child::*[1]/@href').get():
+        for link in response.xpath('descendant::div[contains(@class, "menu-tree")]/*/@href').getall():
             url = response.urljoin(link)
             print(url)
-            # if url[-4:] == '-ldp':
-            #     url = url[:-4]
             # if 'https://cellphones.com.vn/' in url:
-            #     yield scrapy.Request(url=url, callback=self.parse_category)
+            yield scrapy.Request(url=url, callback=self.parse_category)
 
-    
     def parse_category(self, response):
+        category_box = response.xpath('//')
         pass
         
     def parse_product(self, response):

@@ -27,8 +27,8 @@ LOG_FILE_APPEND = False
 
 # Pipe line
 ITEM_PIPELINES ={
-    'crawler.pipelines.CustomImagePipeline': 1,
-    'crawler.pipelines.SQLPipeline': 2,
+    #'crawler.pipelines.CustomImagePipeline': 1,
+    #'crawler.pipelines.SQLPipeline': 2,
     'crawler.pipelines.CrawlerPipeline' : 3,
 }
 IMAGES_STORE = 'web/static/images'
