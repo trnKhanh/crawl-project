@@ -30,8 +30,9 @@ class SQLPipeline:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password=os.getenv("mysql_root_password"),
-            database="crawl_database"
+            password="22042003",
+            database="crawl_database",
+            auth_plugin = "22042003"
         )
         self.cursor = self.db.cursor()
 
@@ -55,8 +56,8 @@ class SQLPipeline:
             new_row.append(None)
         
         new_row.append(item["website"])
-        # print(sql)
-        # print(new_row)
+        print(sql)
+        print(new_row)
         self.cursor.execute(sql, new_row)
         return item
 

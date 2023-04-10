@@ -1,7 +1,7 @@
 import scrapy
 import json
-from .cellphoneSData import *
-from .cellphoneSUtils import *
+from .data import *
+from .utils import *
 from crawler.items import ProductItem
 
 class GearvnHomeSpider(scrapy.Spider):

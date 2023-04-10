@@ -1,7 +1,7 @@
 import scrapy
 import json
-from .GearvnData import *
-from .GearvnUtils import *
+from .data import *
+from .utils import *
 from crawler.items import ProductItem
 
 class GearvnHomeSpider(scrapy.Spider):
@@ -54,16 +54,15 @@ class GearvnHomeSpider(scrapy.Spider):
 
         # get image
         image_urls = [response.meta.get("thumbnail_image")]
-        product_urls = [response.meta.get("product_url")]
+        product_urls = response.meta.get("product_url")
         #price = [response.meta.get("product_price")]
         price = response.xpath('descendant::span[contains(@class, "product_sale_price")]/text()').get()[:-3]
         product_name = (response.css('.page_content').css('h1::text').get()[8:])[:-8]
         category_table = get_category_table(product_name)
         dict={
-            "product_name" : product_name,
+            "name" : product_name,
             "price" : price_to_int(price),
-            "image_urls" : image_urls,
-            "product_urls" : product_urls,
+            "url" : product_urls,
         }
             
         for product_parameter, product_parameter_alias in category_parameter[category_table].items():
@@ -77,6 +76,7 @@ class GearvnHomeSpider(scrapy.Spider):
         #print(dict)
         #print()
         yield ProductItem(category=category_table,
+                          image_urls=image_urls,
                           product_info=dict,
                           website="Gearvn")
     

@@ -3,7 +3,7 @@ import os
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
-from crawler.spiders.gearvn.GearvnHome import GearvnHomeSpider
+from crawler.spiders.gearvn.spider import GearvnHomeSpider
 
 def crawling():
     print("Crawling...")
