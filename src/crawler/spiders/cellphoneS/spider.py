@@ -9,7 +9,7 @@ class CellphoneSSpider(scrapy.Spider):
     name = 'CellPhoneS_spider'
     start_urls = ['https://cellphones.com.vn/']
 
-    filter_category_url = "https://api.cellphones.com.vn/v2/graphql/query"
+    api_category_url = "https://api.cellphones.com.vn/v2/graphql/query"
     def start_requests(self):
         for url in self.start_urls:
             yield scrapy.Request(
@@ -27,7 +27,6 @@ class CellphoneSSpider(scrapy.Spider):
                 method="POST",
                 callback=self.parse_category,
             )
-            return
         
     def parse_category(self, response):
         url = response.request.url
@@ -89,7 +88,7 @@ query{
         category_table = extract_num_from_last(category_info)
         
         yield scrapy.Request(
-            url=self.filter_category_url, 
+            url=self.api_category_url, 
             method="POST",
             callback=self.parse_product,
             headers={
