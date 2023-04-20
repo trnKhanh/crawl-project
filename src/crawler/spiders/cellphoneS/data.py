@@ -18,6 +18,7 @@ def get_category_table(id):
     else:
         return "other"
 
+#remap
 category_id = {}
 for id in category_table:
     category_id[category_table[id]] = id
@@ -38,42 +39,42 @@ alias_parameter = {
 }
 
 category_parameter = {
-    category_id["phone"]:{
+    "phone":{
         "chip" : alias_parameter["chip"],
         "size": alias_parameter["size_screen"],
         "ram": alias_parameter["ram"],
         "disk": alias_parameter["disk"],
         "OS": alias_parameter["os"],
     },
-    category_id["laptop"]: {
+    "laptop": {
         "cpu": alias_parameter["cpu"],
         "disk": alias_parameter["disk"],
         "OS": alias_parameter["os"],
         "ram": alias_parameter["ram"],
         "screen": alias_parameter["screen"],
     },
-    category_id["PC"]: {
+    "PC": {
         "cpu": alias_parameter["cpu"],
         "ram": alias_parameter["ram"],
         "disk": alias_parameter["disk"],
         "screen": alias_parameter["size_screen"],
         "OS": alias_parameter["os"],
     },
-    category_id["keyboard"]: {
+    "keyboard": {
         "brand": alias_parameter["brand"],
         "compatible": alias_parameter["compatible"],
         "connect_type": alias_parameter["connect_type"],
         "size": alias_parameter["size_keyboard"],
     },
-    category_id["mouse"]: {
+    "mouse": {
         "brand": alias_parameter["brand"],
         "connect_type": alias_parameter["connect_type"],
         "dpi": alias_parameter["dpi"],
     },
-    category_id["screen"]: {
+    "screen": {
         "screen_size": alias_parameter["size_screen"],
     },
-    category_id["smart_watch"]:{ 
+    "smart_watch":{ 
         "brand": alias_parameter["brand"],
         "size_screen": alias_parameter["size_screen"]
     },
