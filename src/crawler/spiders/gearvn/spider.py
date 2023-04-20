@@ -72,8 +72,7 @@ class GearvnSpider(scrapy.Spider):
                 dict[product_parameter] = response.xpath(Myxpath).get()
                 if dict[product_parameter] != None:
                     break
-        #print(dict)
-        #print()
+
         yield ProductItem(category=category_table,
                           image_urls=image_urls,
                           product_info=dict,

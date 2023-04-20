@@ -23,59 +23,51 @@ category_id = {}
 for id in category_table:
     category_id[category_table[id]] = id
 
-alias_parameter = {
-    "brand": ["Hãng sản xuất"],
-    "connect_type": ["Cách kết nối", "Kết nối"],
-    "compatible": ["Tương thích"],
-    "cpu": ["CPU", "Loại CPU"],
-    "chip": ["chipset"],
-    "disk": ["storage"],
-    "dpi" : ["Độ phân giải"],
-    "size_keyboard": ["Kích thước bàn phím"],
-    "size_screen": ["display_size"],
-    "os": ["operating_system"],
-    "ram": ["memory_internal"],
-    "screen": ["Màn hình"],
-}
-
 category_parameter = {
     "phone":{
-        "chip" : alias_parameter["chip"],
-        "size": alias_parameter["size_screen"],
-        "ram": alias_parameter["ram"],
-        "disk": alias_parameter["disk"],
-        "OS": alias_parameter["os"],
+        "chip" : "chipset",
+        "size": "display_size",
+        "ram": "memory_internal",
+        "disk": "storage",
+        "OS": "os_version",
     },
     "laptop": {
-        "cpu": alias_parameter["cpu"],
-        "disk": alias_parameter["disk"],
-        "OS": alias_parameter["os"],
-        "ram": alias_parameter["ram"],
-        "screen": alias_parameter["screen"],
+        "cpu": "cpu",
+        "disk": "o_cung_laptop",
+        "OS": "os_version",
+        "ram": "laptop_ram",
+        "screen": "display_type",
+    },
+    "tablet":{
+        "chip": "chipset",
+        "ram": "memory_internal",
+        "disk": "storage",
+        "screen": "display_size",
+        "OS": "os_version",
     },
     "PC": {
-        "cpu": alias_parameter["cpu"],
-        "ram": alias_parameter["ram"],
-        "disk": alias_parameter["disk"],
-        "screen": alias_parameter["size_screen"],
-        "OS": alias_parameter["os"],
+        "cpu": "cpu",
+        "ram": "laptop_ram", #weird !!!
+        "disk": "hdd_sdd",
+        "screen": "display_size",
+        "OS": "os_version",
     },
     "keyboard": {
-        "brand": alias_parameter["brand"],
-        "compatible": alias_parameter["compatible"],
-        "connect_type": alias_parameter["connect_type"],
-        "size": alias_parameter["size_keyboard"],
+        "brand": "phone_accessory_brands", #weird !!!
+        "compatible": "banphim_tuong_thich",
+        "connect_type": "banphim_cach_ket_noi",
+        "size": "banphim_kich_thuoc",
     },
     "mouse": {
-        "brand": alias_parameter["brand"],
-        "connect_type": alias_parameter["connect_type"],
-        "dpi": alias_parameter["dpi"],
+        "brand": "phone_accessory_brands",
+        "connect_type": "banphim_cach_ket_noi", #weird !!!
+        "dpi": "sensors",
     },
     "screen": {
-        "screen_size": alias_parameter["size_screen"],
+        "screen_size": "monitor_size_man_hinh",
     },
     "smart_watch":{ 
-        "brand": alias_parameter["brand"],
-        "size_screen": alias_parameter["size_screen"]
+        "brand": "phone_accessory_brands",
+        "size_screen": "smart_watch_duong_kinh_mat"
     },
 }

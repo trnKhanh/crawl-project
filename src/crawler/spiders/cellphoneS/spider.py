@@ -113,7 +113,7 @@ query{
             return
         size = len(data)
         category_url = response.meta.get("category_url")[:-5]
-        category_id = response.meta.get("category_id")
+        id = response.meta.get("category_id")
         for i in range(0, size):
             general = data[i]['general']
             filter = data[i]['filterable']
@@ -130,20 +130,17 @@ query{
                 "url" : url_product,
             }
             
-            for product_parameter, product_parameter_alias in category_parameter[category_table[category_id]].items():
-                info[product_parameter] = None
-                for alias in product_parameter_alias:
-                    specify_info = attributes[alias]
-                    if specify_info != None:
-                        info[product_parameter] = specify_info
-                        break
-                    if info[product_parameter] != None:
-                        break
+            for product_info, product_info_alias in category_parameter[category_table[id]].items():
+                info[product_info] = None
+                specify_info = attributes[product_info_alias]
+                if specify_info != None:
+                    info[product_info] = specify_info
             print(info)
-            yield ProductItem(category=category_table,
-                          image_urls=url_thumbnail_product,
-                          product_info=info,
-                          website="CellPhoneS")
+                
+            # yield ProductItem(category=category_table,
+            #               image_urls=url_thumbnail_product,
+            #               product_info=info,
+            #               website="CellPhoneS")
             
 
     
