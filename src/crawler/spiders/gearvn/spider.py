@@ -17,7 +17,6 @@ class GearvnSpider(scrapy.Spider):
             
     
     def parse(self, response):
-        #data = json.loads(response.text)
         for category in response.css('.sub-cat-item-filter'):
             category_link = category.css('::attr(href)').get()
             yield scrapy.Request(

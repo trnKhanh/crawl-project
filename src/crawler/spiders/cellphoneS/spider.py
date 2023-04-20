@@ -1,87 +1,140 @@
 import scrapy
 import json
+import requests
 from .data import *
 from .utils import *
 from crawler.items import ProductItem
-from scrapy_playwright.page import PageMethod
 
 class CellphoneSSpider(scrapy.Spider):
     name = 'CellPhoneS_spider'
-    urls = ['https://cellphones.com.vn/']
+    start_urls = ['https://cellphones.com.vn/']
 
-    category_urls = [
-        'https://cellphones.com.vn/mobile.html',
-        'https://cellphones.com.vn/laptop.html',
-        'https://cellphones.com.vn/tablet.html',
-        'https://cellphones.com.vn/do-choi-cong-nghe.html',
-        'https://cellphones.com.vn/may-tinh-de-ban.html',
-    ]
-    
+    filter_category_url = "https://api.cellphones.com.vn/v2/graphql/query"
     def start_requests(self):
-        for url in self.urls:
+        for url in self.start_urls:
             yield scrapy.Request(
                 url=url, 
                 callback=self.parse,
-                meta=dict())
-        # for url in self.category_urls:
-        #     yield scrapy.Request(url=url, callback=self.parse_category)
+            )
             
     def parse(self, response):
-        for link in response.xpath('descendant::div[contains(@class, "menu-tree")]/*/@href').getall():
-            url = response.urljoin(link)
-            print(url)
-            # if 'https://cellphones.com.vn/' in url:
+        category_box = response.xpath('descendant::div[contains(@class, "menu-tree")]/*/@href').getall()
+        for link in category_box:
+            if link == "#":
+                continue
             yield scrapy.Request(
-                url=url, 
+                url=link,
+                method="POST",
                 callback=self.parse_category,
-                meta=dict(
-                playwright=True,
-                playwright_page_methods=[
-                    PageMethod("wait_for_selector", "div.l-pd", timeout=10 * 1000, state='attached'),
-                    PageMethod("wait_for_selector", "div.st-slider img", timeout=10 * 1000, state='attached'),
-                    PageMethod("wait_for_selector", "ol.breadcrumb > li:nth-child(2)", timeout=10 * 1000, state='attached'),
-                    PageMethod("wait_for_selector", ".st-pd-table-viewDetail > a", timeout=10 * 1000, state='attached'),
-                    PageMethod("click", ".st-pd-table-viewDetail > a")
-                ],
-                name=None,
-            ))
-            return
-
-    def parse_category(self, response):
-        category_box = response.xpath('//div[contains(@class, "item-categories-outer")]/child::*[1]').getall()
-        print(category_box)
-        return
-        for category in category_box:
-            url = response.urljoin(category.xpath('/@href').get())
-            print(url)
-            #yield scrapy.Request(url=url, callback=self.parse_sub_category)        
-        return
-    
-    def parse_sub_category(self, response):
-        product_box = response.xpath('//div[contains(@class, "product-info")]')
-        for product in product_box:
-            product_name = product.xpath('descendant::div[contains(@class, "product__name")]/*/text()').get()
-            product_url = product.xpath('child::[1]/@href').get()
-            image_url = product.xpath('descendant::img[1]/@src').get()
-            yield scrapy.Request(
-                url=product_url,
-                callback=self.parse_product,
-                meta=dict(
-                    product_name=product_name,
-                    product_url=product_url,
-                    image_url=image_url,
-                )
             )
-        pass
-    
+            return
+        
+    def parse_category(self, response):
+        url = response.request.url
+        print(url)
+        query = """
+query{
+    products(
+            filter: {
+                static: {
+                    categories: ["<cate-id>"],
+                    province_id: 30, 
+                    stock: {
+                        from: 0
+                    },
+                    stock_available_id: [46, 56, 152],
+                    filter_price: {from:0to:1000000000}
+                },
+                dynamic: {
+                    
+                }
+            },
+            page: 1,
+            size: 10000,
+            sort: [{view: desc}]
+        )
+    {
+        general{
+            product_id
+            name
+            attributes
+            attributes
+            sku
+            doc_quyen
+            manufacturer
+            url_key
+            url_path
+            categories{
+                categoryId
+            }
+        },
+        filterable{
+            is_installment
+            stock_available_id
+            filter {
+                id
+                Label
+            }
+            price
+            special_price
+            promotion_information
+            thumbnail
+            promotion_pack
+            sticker
+        },
+    }
+}"""
+        
+        category_info = response.xpath('descendant::div[contains(@class, "cps-container cps-body")]/*[2]/*[1]/@class').get()
+        category_table = extract_num_from_last(category_info)
+        
+        yield scrapy.Request(
+            url=self.filter_category_url, 
+            method="POST",
+            callback=self.parse_product,
+            headers={
+                "Content-Type": "application/json",
+            },
+            meta=dict(
+                category_url=url,
+                category_id=category_table
+            ),
+            body=json.dumps({
+                "query": query.replace("<cate-id>", "{}".format(category_table)),
+                "variables": {},
+            })
+        )
+        
     def parse_product(self, response):
-        product_name = response.meta.get("product_name")
-        product_link = response.meta.get("product_url")
-        image_url = response.meta.get("image_url")
-        yield {
-            'name':product_name,
-            'link':product_link,
-            'image':image_url,
-        }
-    
+        data = json.loads(response.body)
+        data = data["data"]["products"]
+        
+        if data == None:
+            return
+        size = len(data)
+        category_url = response.meta.get("category_url")[:-5]
+        for i in range(0, size):
+            general = data[i]['general']
+            filter = data[i]['filterable']
+            attributes = general['attributes']
+            
+            url_thumbnail_product = category_url + filter['thumbnail'][1:]
+            url_product = category_url + "/" + general["url_path"]
+            name_product = general['name']  
+            price = filter['price']
+            
+            info={
+                "name" : name_product,
+                "price" : price,
+                "url" : url_product,
+            }
+            
+            print(name_product)
+            print(info)
+            # yield ProductItem(category=category_table,
+            #               image_urls=url_thumbnail_product,
+            #               product_info=info,
+            #               website="CellPhoneS")
+            
+
     
