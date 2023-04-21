@@ -31,6 +31,8 @@ class CellphoneSSpider(scrapy.Spider):
     def parse_category(self, response):
         url = response.request.url
         print(url)
+        # if url != "https://cellphones.com.vn/laptop.html":
+        #     return
         query = """
 query{
     products(
@@ -86,7 +88,7 @@ query{
         
         category_info = response.xpath('descendant::div[contains(@class, "cps-container cps-body")]/*[2]/*[1]/@class').get()
         category_table = extract_num_from_last(category_info)
-        
+        print(category_table)
         yield scrapy.Request(
             url=self.api_category_url, 
             method="POST",
@@ -128,13 +130,15 @@ query{
                 "price" : price,
                 "url" : url_product,
             }
-            
+            print(name_product)
             for product_parameter, alias in category_parameter[category_table[id]].items():
                 info[product_parameter] = None
+                if alias not in attributes:
+                    continue
                 specify_info = attributes[alias]
                 if specify_info != None:
                     info[product_parameter] = specify_info
-            print(info)
+            # print(info)
                 
             yield ProductItem(category=category_table,
                           image_urls=url_thumbnail_product,
