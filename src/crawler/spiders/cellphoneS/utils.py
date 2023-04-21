@@ -25,6 +25,9 @@ def price_to_int(pattern):
 
 def extract_num_from_last(pattern):
     index = 0
+    
+    if pattern == None:
+        return ""
     for i in pattern:
         if i.isnumeric() == True:
             break

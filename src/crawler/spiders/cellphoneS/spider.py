@@ -129,17 +129,17 @@ query{
                 "url" : url_product,
             }
             
-            for product_info, product_info_alias in category_parameter[category_table[id]].items():
-                info[product_info] = None
-                specify_info = attributes[product_info_alias]
+            for product_parameter, alias in category_parameter[category_table[id]].items():
+                info[product_parameter] = None
+                specify_info = attributes[alias]
                 if specify_info != None:
-                    info[product_info] = specify_info
+                    info[product_parameter] = specify_info
             print(info)
                 
-            # yield ProductItem(category=category_table,
-            #               image_urls=url_thumbnail_product,
-            #               product_info=info,
-            #               website="CellPhoneS")
+            yield ProductItem(category=category_table,
+                          image_urls=url_thumbnail_product,
+                          product_info=info,
+                          website="CellPhoneS")
             
 
     

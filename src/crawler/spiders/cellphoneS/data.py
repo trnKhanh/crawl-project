@@ -70,4 +70,7 @@ category_parameter = {
         "brand": "phone_accessory_brands",
         "size_screen": "smart_watch_duong_kinh_mat"
     },
+    "other":{
+        "brand": "phone_accessory_brands",
+    }
 }
