@@ -67,7 +67,7 @@ category_parameter = {
         "screen_size": "monitor_size_man_hinh",
     },
     "smart_watch":{ 
-        "brand": "phone_accessory_brands",
+        "brand": "phone_accessory_brands", #weird !!!
         "size_screen": "smart_watch_duong_kinh_mat"
     },
     "other":{

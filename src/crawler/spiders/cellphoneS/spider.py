@@ -10,29 +10,50 @@ class CellphoneSSpider(scrapy.Spider):
     start_urls = ['https://cellphones.com.vn/']
 
     api_category_url = "https://api.cellphones.com.vn/v2/graphql/query"
+    
+    thumbnail_url_prefix = "https://cdn2.cellphones.com.vn/358x358,webp,q100/media/catalog/product"
+    
+    hiden_category_urls = [
+        'https://cellphones.com.vn/man-hinh.html',
+        'https://cellphones.com.vn/phu-kien/chuot-ban-phim-may-tinh/ban-phim.html',
+        'https://cellphones.com.vn/phu-kien/chuot-ban-phim-may-tinh/chuot.html',
+    ]
+    
+    forbidden_urls = [
+        'https://cellphones.com.vn/sforum/',
+        'https://cellphones.com.vn/danh-sach-khuyen-mai',
+    ]
+    
     def start_requests(self):
         for url in self.start_urls:
             yield scrapy.Request(
                 url=url, 
                 callback=self.parse,
             )
+        
             
     def parse(self, response):
         category_box = response.xpath('descendant::div[contains(@class, "menu-tree")]/*/@href').getall()
         for link in category_box:
-            if link == "#":
+            if link == "#" or (link in self.forbidden_urls):
                 continue
             yield scrapy.Request(
                 url=link,
                 method="POST",
                 callback=self.parse_category,
             )
+        #parse more
+        for url in self.hiden_category_urls:
+            yield scrapy.Request(
+                url=url,
+                method="POST",
+                callback=self.parse_category
+            )
         
     def parse_category(self, response):
         url = response.request.url
         print(url)
-        # if url != "https://cellphones.com.vn/laptop.html":
-        #     return
+
         query = """
 query{
     products(
@@ -120,7 +141,7 @@ query{
             filter = data[i]['filterable']
             attributes = general['attributes']
             
-            url_thumbnail_product = category_url + filter['thumbnail'][1:]
+            url_thumbnail_product = self.thumbnail_url_prefix + filter['thumbnail']
             url_product = category_url + "/" + general["url_path"]
             name_product = general['name']  
             price = filter['special_price']
@@ -130,7 +151,7 @@ query{
                 "price" : price,
                 "url" : url_product,
             }
-            print(name_product)
+            # print(name_product)
             for product_parameter, alias in category_parameter[category_table[id]].items():
                 info[product_parameter] = None
                 if alias not in attributes:
@@ -138,7 +159,6 @@ query{
                 specify_info = attributes[alias]
                 if specify_info != None:
                     info[product_parameter] = specify_info
-            # print(info)
                 
             yield ProductItem(category=category_table,
                           image_urls=url_thumbnail_product,
