@@ -1,6 +1,5 @@
 import scrapy
 import json
-import requests
 from .data import *
 from .utils import *
 from crawler.items import ProductItem
@@ -30,10 +29,10 @@ class CellphoneSSpider(scrapy.Spider):
                 url=url, 
                 callback=self.parse,
             )
-        
             
     def parse(self, response):
         category_box = response.xpath('descendant::div[contains(@class, "menu-tree")]/*/@href').getall()
+        
         for link in category_box:
             if link == "#" or (link in self.forbidden_urls):
                 continue
@@ -52,7 +51,6 @@ class CellphoneSSpider(scrapy.Spider):
         
     def parse_category(self, response):
         url = response.request.url
-        print(url)
 
         query = """
 query{
@@ -109,7 +107,7 @@ query{
         
         category_info = response.xpath('descendant::div[contains(@class, "cps-container cps-body")]/*[2]/*[1]/@class').get()
         category_table = extract_num_from_last(category_info)
-        print(category_table)
+
         yield scrapy.Request(
             url=self.api_category_url, 
             method="POST",
@@ -133,9 +131,11 @@ query{
         
         if data == None:
             return
+        
         size = len(data)
         category_url = response.meta.get("category_url")[:-5]
         id = response.meta.get("category_id")
+        
         for i in range(0, size):
             general = data[i]['general']
             filter = data[i]['filterable']
@@ -151,6 +151,7 @@ query{
                 "price" : price,
                 "url" : url_product,
             }
+            
             # print(name_product)
             for product_parameter, alias in category_parameter[category_table[id]].items():
                 info[product_parameter] = None
@@ -165,5 +166,4 @@ query{
                           product_info=info,
                           website="CellPhoneS")
             
-
     

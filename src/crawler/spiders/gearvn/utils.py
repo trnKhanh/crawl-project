@@ -15,9 +15,13 @@ def parameter_xpath(parameter_name):
 
 def price_to_int(pattern):
     result = 0
+    
+    if pattern == None or pattern == "":
+        return result
+    
     for i in pattern:
-        if i == ',':
+        if not i.isdigit():
             continue
         result = result * 10 + int(i)
+        
     return result
-    pass
