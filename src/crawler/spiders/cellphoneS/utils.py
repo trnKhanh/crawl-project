@@ -12,21 +12,20 @@ def price_to_int(pattern):
     return result
 
 def extract_num_from_last(pattern):
-
-    if pattern == None:
-        return ""
+    if pattern == None or pattern == "":
+        return 0
     
     index = 0
     
     for i in pattern:
-        if i.isnumeric() == True:
+        if i.isdigit() == True:
             break
         index = index + 1
     
     result_string = pattern[index:]
     
     if result_string == "":
-        return result_string
+        return 0
     
     result = price_to_int(result_string)
     return result

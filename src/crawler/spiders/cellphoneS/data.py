@@ -1,5 +1,3 @@
-import regex as re
-
 # div.id
 category_table = {
     3: "phone",
