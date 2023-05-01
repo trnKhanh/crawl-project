@@ -9,6 +9,8 @@ class CustomFilter(RFPDupeFilter):
         print("CustomFilter destruction")
 
     def request_seen(self, request):
+        if 'https://cellphones.com.vn/' in request.url:
+            return False
         if request.url in self.urls_seen:
             return True
         else: 

@@ -13,8 +13,8 @@ SPIDER_MODULES = ["crawler.spiders"]
 NEWSPIDER_MODULE = "crawler.spiders"
 
 # Log file
-LOG_FILE = '1_TGDD.log'
-LOG_FILE_APPEND = False
+LOG_FILE = 'CRAWLER_SPIDER.log'
+LOG_FILE_APPEND = True
 
 # feed
 # FEEDS = {
@@ -33,7 +33,7 @@ ITEM_PIPELINES ={
 IMAGES_STORE = 'web/static/images'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36"
+USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36"
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -73,9 +73,14 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    "crawler.middlewares.CrawlerDownloaderMiddleware": 543,
-#}
+# ROTATING_PROXY_LIST = [
+#     '223.199.16.104:9999',
+#     '149.20.253.93:12551'
+# ]
+# DOWNLOADER_MIDDLEWARES = {
+#     'rotating_proxies.middlewares.RotatingProxyMiddleware': 610,
+#     'rotating_proxies.middlewares.BanDetectionMiddleware': 620,
+# }
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html

@@ -30,8 +30,8 @@ class SQLPipeline:
         )
         self.cursor = self.db.cursor()
 
-    def close_spider(self, spider):
-        self.db.commit()
+    # def close_spider(self, spider):
+    #     pass
         
     def process_item(self, item, spider):
         column_names = (', '.join(item["product_info"].keys()) + ', image_path' + ', website')
@@ -53,4 +53,5 @@ class SQLPipeline:
         # print(sql)
         # print(new_row)
         self.cursor.execute(sql, new_row)
+        self.db.commit()
         return item
