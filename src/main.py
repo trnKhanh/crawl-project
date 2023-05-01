@@ -1,4 +1,5 @@
 from crawler.spiders.tgdd.SPIDER import TgddSpider
+from crawler.spiders.fpt.SPIDER import FPTSpider
 
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
@@ -19,13 +20,11 @@ def delete_data():
     db.commit()
 
 if __name__ == '__main__':
-    if os.path.isfile('text/items.jsonl'):
-        os.remove('text/items.jsonl')
-    if os.path.isfile('1_TGDD.log'):
-        os.remove('1_TGDD.log')
-    # delete_data()
+    if os.path.isfile('CRAWLER_SPIDER.log'):
+        os.remove('CRAWLER_SPIDER.log')
+    delete_data()
     process = CrawlerProcess(get_project_settings()) 
-    process.crawl(TgddSpider)
+    process.crawl(TgddSpider).addCallback(lambda _: process.crawl(FPTSpider))
     # d = process.join()
     # d.addCallback(lambda _: foo(process))
 
