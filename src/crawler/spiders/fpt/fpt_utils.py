@@ -38,6 +38,23 @@ def extract_disk(disk):
         if amount == None:
             return None
         return amount + ' ' + disk_type
+    
+    return None
+
+def extract_screen(screen):
+    result = re.search(r'\d+(\.\d+)?\s*(inch|\')', screen)
+    if result:
+        result = result.group()
+        return result
+    
+    return None
+
+def extract_byte(data):
+    pattern = r'\d+\s*\w*?B'
+    amount = re.search(pattern, data.upper())
+    if amount:
+        return amount.group()
+    return None
 
 def normalize_disk_amount(amount):
     if amount == None:

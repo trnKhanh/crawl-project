@@ -13,7 +13,7 @@ class TgddSpider(scrapy.Spider):
     filter_url = "https://www.thegioididong.com/Category/FilterProductBox?c=<cate_id>&priceminmax=0-1000000&pi=0"
     parameter_url = "https://www.thegioididong.com/Product/GetGalleryItemInPopup?productId={}&isAppliance=false&galleryType=5&colorId=0"
     urls = [
-        # 'https://www.thegioididong.com',
+        'https://www.thegioididong.com',
     ]
     category_urls = [
         # 'https://www.thegioididong.com/dong-ho-deo-tay',
@@ -30,8 +30,8 @@ class TgddSpider(scrapy.Spider):
     def start_requests(self):
         for url in self.urls:
             yield scrapy.Request(url=url, callback=self.parse)
-        for url in self.category_urls:
-            yield scrapy.Request(url=url, callback=self.category_parse)
+        # for url in self.category_urls:
+        #     yield scrapy.Request(url=url, callback=self.category_parse)
 
     def parse(self, response):
         for link in response.xpath("//body/header/descendant::a/@href").getall():
@@ -151,11 +151,11 @@ class TgddSpider(scrapy.Spider):
                 if parameter_name.lower() == "disk":
                     data = ', '.join(filter(None, map(extract_disk, response.xpath(parameter_xpath(name_in_web)).getall())))
                 elif parameter_name.lower() == "ram":
-                    data = response.xpath(parameter_xpath(name_in_web)).get()
+                    data = response.xpath(parameter_xpath(name_in_web)).get().strip()
                 elif parameter_name.lower() in ["cpu", "chip"]:
-                    data = ' '.join(response.xpath(parameter_xpath(name_in_web)).getall())
+                    data = ' '.join([s.strip() for s in response.xpath(parameter_xpath(name_in_web)).getall()])
                 else:
-                    data = ', '.join(response.xpath(parameter_xpath(name_in_web)).getall())
+                    data = ', '.join([s.strip() for s in response.xpath(parameter_xpath(name_in_web)).getall()])
                 data = data.strip()
                 if data.lower() in ['', 'hãng không công bố', 'không có']:
                     data = None
