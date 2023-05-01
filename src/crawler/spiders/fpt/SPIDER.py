@@ -37,26 +37,8 @@ class FPTSpider(scrapy.Spider):
     loadmore_url = "https://fptshop.com.vn/linh-kien/api/LoadMoreProduct?CateId=&PageIndex={}&SortID=4&ListFilter=&CateNameAscii=&Keyword="
     # used when testing
     category_urls = [
-        # "https://fptshop.com.vn/may-tinh-xach-tay?trang=100",
-        # "https://fptshop.com.vn/dien-thoai?trang=100",
-        # "https://fptshop.com.vn/may-tinh-bang?trang=100",
-        # "https://fptshop.com.vn/may-tinh-de-ban?trang=100",
-        "https://fptshop.com.vn/phu-kien/bao-da-op-lung"
     ]
     product_urls = [
-        # "https://fptshop.com.vn/dien-thoai/samsung-galaxy-s23-ultra",
-        "https://fptshop.com.vn/may-tinh-xach-tay/asus-tuf-gaming-fx506lhb-hn188w-i5-10300h",
-        "https://fptshop.com.vn/may-tinh-bang/samsung-galaxy-tab-s6-lite-2022",
-        # "https://fptshop.com.vn/man-hinh/man-hinh-viewsonic-va2409-h-24-inch",
-        # "https://fptshop.com.vn/phu-kien/ban-phim-bluetooth-logitech-k380",
-        "https://fptshop.com.vn/may-tinh-de-ban/pc-e-power-office-12",
-        "https://fptshop.com.vn/man-hinh/man-hinh-viewsonic-va2409-h-24-inch",
-        # "https://fptshop.com.vn/phu-kien/chuot-khong-day-targus-w600",
-        # "https://fptshop.com.vn/smartwatch/apple-watch-ultra-gps-cellular-49mm-alpine-loop-small",
-        # "https://fptshop.com.vn/may-tinh-de-ban/pc-frt-e-power-006",
-        # "https://fptshop.com.vn/phu-kien/apple-tv-2022-4k-ethernet-128gb",
-        "https://fptshop.com.vn/dien-thoai/iphone-14-pro-max",
-        # "https://fptshop.com.vn/dien-thoai/samsung-galaxy-s22"
     ]
     def start_requests(self):
         # crawl root (contains categories' links)
