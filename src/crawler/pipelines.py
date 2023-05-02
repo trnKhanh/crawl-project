@@ -10,11 +10,7 @@ from scrapy.exceptions import DropItem
 from scrapy.pipelines.images import ImagesPipeline
 import scrapy
 import mysql.connector
-import os
 
-class CrawlerPipeline:
-    def process_item(self, item, spider):
-        return item
 class CustomImagePipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
         for image_url in item['image_urls']:
@@ -30,13 +26,12 @@ class SQLPipeline:
         self.db = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="22042003",
-            database="crawl_database",
+            database="crawl_database"
         )
         self.cursor = self.db.cursor()
 
-    def close_spider(self, spider):
-        self.db.commit()
+    # def close_spider(self, spider):
+    #     pass
         
     def process_item(self, item, spider):
         column_names = (', '.join(item["product_info"].keys()) + ', image_path' + ', website')
@@ -55,8 +50,10 @@ class SQLPipeline:
             new_row.append(None)
         
         new_row.append(item["website"])
-        print(sql)
-        print(new_row)
+
+        # print(sql)
+        # print(new_row)
         self.cursor.execute(sql, new_row)
+        self.db.commit()
         return item
 

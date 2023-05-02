@@ -1,5 +1,4 @@
 USE crawl_database;
-
 DROP TABLE tablet;
 DROP TABLE phone;
 DROP TABLE laptop;
