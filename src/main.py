@@ -26,11 +26,13 @@ def delete_data():
 if __name__ == '__main__':
     if os.path.isfile('CRAWLER_SPIDER.log'):
         os.remove('CRAWLER_SPIDER.log')
-    delete_data()
+    # delete_data()
     process = CrawlerProcess(get_project_settings()) 
-    process.crawl(TgddSpider).addCallback(lambda _: process.crawl(FPTSpider))\
-    process.crawl(GearvnSpider)
-    process.crawl(CellphoneSSpider)
+    process.crawl(TgddSpider).addCallback(
+        lambda _: process.crawl(FPTSpider).addCallback(
+            lambda _: process.crawl(GearvnSpider).addCallback(
+                lambda _: process.crawl(CellphoneSSpider)
+        )))
     # d = process.join()
     # d.addCallback(lambda _: foo(process))
 
