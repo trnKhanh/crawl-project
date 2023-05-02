@@ -1,5 +1,5 @@
 let currentCheck = null;
-let category = document.querySelector("body > main > div.category-name-box > span.category-name").innerHTML.toLowerCase();
+let category = document.querySelector(".category-name").innerHTML.toLowerCase();
 let currentPage = null;
 let maxPage = 1;
 let filters = {};

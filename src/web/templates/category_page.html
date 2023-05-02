@@ -2,53 +2,61 @@
 
 {% block main %}
 <form class="filter-box">
-    <div class="filter-search-bar">
-        <input type="text" placeholder="Name" autocomplete="off">
+    <div class="filter-choice">
+        <input class="filter-search-bar" type="text" placeholder="Name" autocomplete="off">
+
+            <!-- <div class="product-search-result">
+                <div class="product-search-number">{{ product_info["total"] }}</div>
+                <div class="product-search-text"> product(s) found</div>
+            </div> -->
         <select class="sort-type" name="sort-type" >
             <option value="0" selected>No order</option>
             <option value="1">Ascending</option>
             <option value="2">Descending</option>
         </select>
+        <div class="filter">
+            {% if parameters %}
+                {% for parameter in parameters %}
+                    <div class="filter-parameter">
+                        <div class="filter-parameter-name">
+                            {{ parameter["name"] }}
+                            <div class="arrow-filter"></div>
+                        </div>
+                        
+                        <div class="filter-value-box">
+                        {% for value in parameter["values"] %}
+                            <div class="filter-value">{{ value}}</div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="restore-default">Restore default</div>
+    </div>
+    <div class="search-filter-box">
+        <input type="submit" value="Search">
         <div class="product-search-result">
             <div class="product-search-number">{{ product_info["total"] }}</div>
             <div class="product-search-text"> product(s) found</div>
         </div>
     </div>
-    <div class="filter">
-        {% if parameters %}
-            {% for parameter in parameters %}
-                <div class="filter-parameter">
-                    <div class="filter-parameter-name">
-                        {{ parameter["name"] }}
-                        <div class="arrow-filter"></div>
-                    </div>
-                    
-                    <div class="filter-value-box">
-                    {% for value in parameter["values"] %}
-                        <div class="filter-value">{{ value}}</div>
-                    {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
+</form>
+<div class="product-container">
+    <div class="category-name-box">
+        {% if product_info %}
+            <span class="category-name">{{ product_info["category"] }}</span>
+            <span class="product-number">({{ product_info["total"] }})</span>
         {% endif %}
     </div>
-    <div class="restore-default">Restore default</div>
-    <input type="submit" value="Search">
-</form>
 
-<div class="category-name-box">
-    {% if product_info %}
-        <span class="category-name">{{ product_info["category"] }}</span>
-        <span class="product-number">({{ product_info["total"] }})</span>
-    {% endif %}
-</div>
-
-<div class="listproduct">
-    {% if product_info %}
-        {{ product_info["listproduct"] | safe }}
-    {% endif %}
-</div>
-<div class="paging-section">
+    <div class="listproduct">
+        {% if product_info %}
+            {{ product_info["listproduct"] | safe }}
+        {% endif %}
+    </div>
+    <div class="paging-section">
+    </div>
 </div>
 
 <script src="../static/script.js"></script>
