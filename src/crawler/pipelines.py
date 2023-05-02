@@ -50,8 +50,10 @@ class SQLPipeline:
             new_row.append(None)
         
         new_row.append(item["website"])
+
         # print(sql)
         # print(new_row)
         self.cursor.execute(sql, new_row)
         self.db.commit()
         return item
+
