@@ -1,0 +1,57 @@
+:root {
+	--bg-color: #ffffff;
+
+	/* NAV BAR COLOR */
+   	--nav-bg-color: #dcf7e4;
+	/* --nav-border-color: */
+	--nav-btn-bg-color: #dcf7e4;
+	/*--nav-btn-border-color:*/
+	--nav-btn-text-color: #32a152;
+	--nav-btn-bg-color-hover: #32a152;
+	/*--nav-btn-border-color: */
+	--nav-btn-text-color-hover: #ffffff;	
+
+	/* FILTER BOX COLOR */
+	/* --filter-box-bg-color:;
+	--filter-parameter-bg-color:;
+	--filter-parameter-border-color:;
+	--filter-parameter-text-color:;
+
+	--filter-value-box-bg-color:;
+	--filter-value-box-border-color:;
+
+	--filter-value-bg-color:;
+	--filter-value-border-color:;
+	--filter-value-text-color:;
+
+	--checked-box-bg-color:;
+	--checked-box-border-color:;
+	--checked-box-text-color:;
+	/* CATEGORY NAME COLOR */
+	/* --cate-box-bg-color:;
+	--cate-box-border-color:;
+	--cate-box-text-color:;
+
+	--cate-name-color:;
+	--cate-product-number-color:; */ 
+	/* PRODUCT LIST COLOR */
+	/*
+	--pdlist-bg-color:;
+	--pdlist-border-color:;
+	
+	--pd-bg-color:
+	--pd-border-color:
+	--pd-name-text-color:
+	--pd-price-text-color:
+	--pd-shop-color:
+	
+	--pd-bg-color-hover:
+	--pd-border-color-hover:
+	--pd-name-text-color-hover:
+	--pd-price-text-color-hover:
+	--pd-shop-color-hover:*/
+
+	/* FOOTER COLOR */
+	--footer-bg-color: #00b033;
+	--footer-text-color: #ffffff;
+}

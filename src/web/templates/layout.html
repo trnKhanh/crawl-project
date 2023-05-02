@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Price Comparison</title>
+        <link href="../static/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <div class="header-top">
+                <img class="logo" src="../static/logo_hcmus.png">
+                <form class="search-bar">
+                    <input type="text" required placeholder="Search" autocomplete="off">
+                    <input type="submit" value="Search">
+                </form>
+            </div>
+            <div class="nav-bar">
+                {% for category in categories %}
+                    <a href="/category/{{ category.lower().replace(' ','-') }}" class="nav-btn">{{ category }}</a>
+                {% endfor %}
+            </div>
+        </header>
+
+        <main>
+            {% block main %}
+            {% endblock %}
+        </main>
+
+        <footer>
+            TNK &#169;
+        </footer>
+    </body>
+</html>
