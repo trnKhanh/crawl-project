@@ -18,20 +18,20 @@ class TgddSpider(scrapy.Spider):
     category_urls = [
         # 'https://www.thegioididong.com/dong-ho-deo-tay',
         'https://www.thegioididong.com/laptop',
-        'https://www.thegioididong.com/may-tinh-bang',
-        'https://www.thegioididong.com/dtdd',
-        'https://www.thegioididong.com/may-tinh-de-ban',
-        'https://www.thegioididong.com/man-hinh-may-tinh',
-        'https://www.thegioididong.com/dong-ho-thong-minh',
-        'https://www.thegioididong.com/chuot-ban-phim',
+        # 'https://www.thegioididong.com/may-tinh-bang',
+        # 'https://www.thegioididong.com/dtdd',
+        # 'https://www.thegioididong.com/may-tinh-de-ban',
+        # 'https://www.thegioididong.com/man-hinh-may-tinh',
+        # 'https://www.thegioididong.com/dong-ho-thong-minh',
+        # 'https://www.thegioididong.com/chuot-ban-phim',
     ]
     post_data = urlencode({"IsParentCate": False, "IsShowCompare": True, "prevent": True})
 
     def start_requests(self):
-        for url in self.urls:
-            yield scrapy.Request(url=url, callback=self.parse)
-        # for url in self.category_urls:
-        #     yield scrapy.Request(url=url, callback=self.category_parse)
+        # for url in self.urls:
+        #     yield scrapy.Request(url=url, callback=self.parse)
+        for url in self.category_urls:
+            yield scrapy.Request(url=url, callback=self.category_parse)
 
     def parse(self, response):
         for link in response.xpath("//body/header/descendant::a/@href").getall():
@@ -154,6 +154,8 @@ class TgddSpider(scrapy.Spider):
                     data = response.xpath(parameter_xpath(name_in_web)).get().strip()
                 elif parameter_name.lower() in ["cpu", "chip"]:
                     data = ' '.join([s.strip() for s in response.xpath(parameter_xpath(name_in_web)).getall()])
+                elif parameter_name.lower() in ['brand']:
+                    data = response.xpath(parameter_xpath(name_in_web)).get().strip()
                 else:
                     data = ', '.join([s.strip() for s in response.xpath(parameter_xpath(name_in_web)).getall()])
                 data = data.strip()

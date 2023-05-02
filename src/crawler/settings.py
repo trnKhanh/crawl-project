@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = "crawler.spiders"
 
 # Log file
 LOG_FILE = 'CRAWLER_SPIDER.log'
-LOG_FILE_APPEND = True
+LOG_FILE_APPEND = False
 
 # feed
 # FEEDS = {

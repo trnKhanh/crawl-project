@@ -141,7 +141,7 @@ query{
             filter = data[i]['filterable']
             attributes = general['attributes']
             
-            url_thumbnail_product = self.thumbnail_url_prefix + filter['thumbnail']
+            url_thumbnail_product = [self.thumbnail_url_prefix + filter['thumbnail']]
             url_product = category_url + "/" + general["url_path"]
             name_product = general['name']  
             price = filter['special_price']
@@ -153,7 +153,7 @@ query{
             }
             
             # print(name_product)
-            for product_parameter, alias in category_parameter[category_table[id]].items():
+            for product_parameter, alias in category_parameter[get_category_table(id)].items():
                 info[product_parameter] = None
                 if alias not in attributes:
                     continue
@@ -161,7 +161,7 @@ query{
                 if specify_info != None:
                     info[product_parameter] = specify_info
                 
-            yield ProductItem(category=category_table,
+            yield ProductItem(category=get_category_table(id),
                           image_urls=url_thumbnail_product,
                           product_info=info,
                           website="CellPhoneS")

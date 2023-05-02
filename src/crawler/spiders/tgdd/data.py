@@ -30,7 +30,7 @@ category_parameter = {
         "cpu": "CPU",
         "ram": "RAM",
         "disk": "Ổ cứng",
-        "screen": "Màn hình",
+        "screen": "Kích thước màn hình",
         "OS": "Hệ điều hành",
     },
     category_id["keyboard"]: {

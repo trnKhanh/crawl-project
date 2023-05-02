@@ -10,6 +10,7 @@ from scrapy.exceptions import DropItem
 from scrapy.pipelines.images import ImagesPipeline
 import scrapy
 import mysql.connector
+from .parse_utils import *
 
 class CustomImagePipeline(ImagesPipeline):
     def get_media_requests(self, item, info):
@@ -34,6 +35,17 @@ class SQLPipeline:
     #     pass
         
     def process_item(self, item, spider):
+        if "cpu" in item['product_info']:
+            item['product_info']['cpu'] = extract_cpu(item['product_info']['cpu'])
+        if "ram" in item['product_info']:
+            item['product_info']['ram'] = extract_byte(item['product_info']['ram'])
+        if "screen" in item['product_info']:
+            item['product_info']['screen'] = extract_screen(item['product_info']['screen'])
+        if 'screen_size' in item['product_info']:
+            item['product_info']['screen_size'] = extract_screen(item['product_info']['screen_size'])
+        if 'disk' in item['product_info']:
+            item['product_info']['disk'] = extract_disk(item['product_info']['disk'])
+
         column_names = (', '.join(item["product_info"].keys()) + ', image_path' + ', website')
         sql = f"""
             INSERT INTO {item["category"]} ({column_names}) 

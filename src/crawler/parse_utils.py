@@ -1,5 +1,16 @@
 import regex as re
 
+def extract_cpu(cpu):
+    found = re.search(r'\d+(\.\d*)?\s*GHz', cpu, re.IGNORECASE)
+    if found:
+        first_pos = found.start()
+    else:
+        first_pos = len(cpu)
+    
+    cpu = cpu[:first_pos].strip()
+    return cpu
+
+
 def extract_disk(disk):
     if disk == None:
         return None
@@ -42,10 +53,10 @@ def extract_disk(disk):
     return None
 
 def extract_screen(screen):
-    result = re.search(r'\d+(\.\d+)?\s*(inch|\')', screen)
+    result = re.search(r'\d+(\.\d+)?(?=.*?(inch|\'|\"|\”))', screen)
     if result:
         result = result.group()
-        return result
+        return result + ' inch'
     
     return None
 
@@ -56,22 +67,21 @@ def extract_byte(data):
         return amount.group()
     return None
 
+def normalize_disk_amount(amount):
+    if amount == None:
+        return None
+    unit = re.search(r'[^\W\d]*B', amount)
+    number = re.search(r'\d+', amount)
+    if number == None or unit == None:
+        return None
+    number = int(number.group())
+    unit = unit.group()
+    return str(number * disk_unit_rate[unit]) + " B"
 
-
-
-vietnamese_charset = "àáâãèéêìíòóôõùúýỳỹỷỵựửữừứưụủũợởỡờớơộổỗồốọỏịỉĩệểễềếẹẻẽặẳẵằắăậẩẫầấạảđabcdeghiklmnopqrstuvxy"
-def upper_text_xpath():
-    return f"translate(text(), '{vietnamese_charset.lower()}','{vietnamese_charset.upper()}')"
-def lower_text_xpath():
-    return f"translate(text(),'{vietnamese_charset.upper()}','{vietnamese_charset.lower()}')"
-def contain_word_xpath():
-    return f'translate(text(),translate(text(),"{vietnamese_charset.upper()}{vietnamese_charset.lower()}",""),"")'
-def parameter_xpath(parameter_name):
-    parameter_name = parameter_name.lower()
-    return f'(descendant-or-self::*[contains(@id, "chitiet")]/descendant::tr/*[1][descendant-or-self::*[contains({lower_text_xpath()}, "{parameter_name}")]])[1]/following-sibling::*[1]/descendant::*[{contain_word_xpath()}]/text()'
-
-def price_to_int(price):
-    if price: 
-        price = re.sub(r"\D", "", price)
-        price = int(price)
-        return price
+disk_unit_rate = {
+    "B": 1,
+    "KB": 1024,
+    "MB": 1024*1024,
+    "GB": 1024*1024*1024,
+    "TB": 1024*1024*1024*1024,
+}
