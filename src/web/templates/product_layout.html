@@ -4,7 +4,7 @@
     <a class="product-box" href="{{ product['url'] }}">
         <div class="product-name" >{{ product['name'] }}</div>
         <div class="product-price">Price: {{product['price']}}</div>
-        <img class="product-img" src="../static/images/{{ product['image_path'] }}">
+        <img class="product-img" src="{{ product['image_path'] }}">
         <div class="product-website">{{ product['website'] }}</div>
     </a>
     {% endfor %}

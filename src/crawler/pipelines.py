@@ -56,7 +56,7 @@ class SQLPipeline:
         new_row = list(item["product_info"].values())
 
         if "image_paths" in item:
-            for image_path in item["image_paths"]:
+            for image_path in item["image_urls"]:
                 new_row.append(image_path)
         else:
             new_row.append(None)
