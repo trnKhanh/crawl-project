@@ -71,6 +71,7 @@ def get_parameters(table_name):
                         parameter["values"].add(value.strip())
                 else:
                     parameter["values"].add(value.strip())
+        parameter["values"].add("Other")
         parameter["values"] = list(parameter["values"])
         parameter["values"].sort()
         parameters.append(parameter)
@@ -113,10 +114,12 @@ def filter_product(table_name: str, filters = {}, page_index: int = 0, product_p
             continue
         condition_in_filter = []
         for requiredment in filter:
-            requiredment = requiredment.replace(" ", "%")
-            condition_in_filter.append(f"{filter_name} LIKE %s")
-            filter_choices.append(f"%{requiredment}%")
-
+            if requiredment.lower() != 'other':
+                requiredment = requiredment.replace(" ", "%")
+                condition_in_filter.append(f"{str(filter_name).replace(' ','_')} LIKE %s")
+                filter_choices.append(f"%{requiredment}%")
+            else:
+                condition_in_filter.append(f"{str(filter_name).replace(' ','_')} IS NULL")
         condition_sql.append(f'({" OR ".join(condition_in_filter)})')
 
     if condition_sql:
@@ -135,8 +138,7 @@ def filter_product(table_name: str, filters = {}, page_index: int = 0, product_p
     }
     start_index = min(len(rows), page_index * product_per_page)
     end_index = min(len(rows), start_index + product_per_page)
-    print(start_index)
-    print(end_index)
+
     listproduct = []
     for row in rows[start_index:end_index]:
         product = {

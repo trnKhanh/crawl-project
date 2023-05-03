@@ -2,10 +2,11 @@
 {% if listproduct %}
     {% for product in listproduct %}
     <a class="product-box" href="{{ product['url'] }}">
-        <div class="product-name" >{{ product['name'] }}</div>
-        <div class="product-price">Price: {{product['price']}}</div>
         <img class="product-img" src="{{ product['image_path'] }}" alt="{{ product['name'] }}">
+        
         <div class="product-website">{{ product['website'] }}</div>
+        <div class="product-name" >{{ product['name'] }}</div>
+        <div class="product-price">{{product['price']}}</div>
     </a>
     {% endfor %}
 {% endif %}

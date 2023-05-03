@@ -39,17 +39,17 @@
 	--pdlist-bg-color:;
 	--pdlist-border-color:;
 	
-	--pd-bg-color:
-	--pd-border-color:
-	--pd-name-text-color:
-	--pd-price-text-color:
-	--pd-shop-color:
+	--pd-bg-color:*/
+	--pd-border-color: black;
+	--pd-name-text-color:  #005418;
+	--pd-price-text-color:#e00202;
+	--pd-shop-color:#910454;
 	
-	--pd-bg-color-hover:
+	/* --pd-bg-color-hover:
 	--pd-border-color-hover:
 	--pd-name-text-color-hover:
 	--pd-price-text-color-hover:
-	--pd-shop-color-hover:*/
+	--pd-shop-color-hover: */
 
 	/* FOOTER COLOR */
 	--footer-bg-color: #00b033;
