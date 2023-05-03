@@ -75,17 +75,11 @@ function loadPaging()
 
     let gotoFirst = pageSection.firstElementChild;
     gotoFirst.addEventListener("click", (e)=>{
-        currentPage.classList.toggle("current-page");
-        gotoFirst.nextElementSibling.classList.toggle("current-page");
-        currentPage = gotoFirst.nextElementSibling;
-        showPageIndex();
+        pageSection.firstElementChild.nextElementSibling.click();
     });
     let gotoLast = pageSection.lastElementChild;
     gotoLast.addEventListener("click", (e)=>{
-        currentPage.classList.toggle("current-page");
-        gotoLast.previousElementSibling.classList.toggle("current-page");
-        currentPage = gotoLast.previousElementSibling;
-        showPageIndex();
+        pageSection.lastElementChild.previousElementSibling.click();
     });
     showPageIndex();
     document.querySelectorAll(".paging-btn").forEach((item)=>{

@@ -28,10 +28,10 @@ class TgddSpider(scrapy.Spider):
     post_data = urlencode({"IsParentCate": False, "IsShowCompare": True, "prevent": True})
 
     def start_requests(self):
-        # for url in self.urls:
-        #     yield scrapy.Request(url=url, callback=self.parse)
-        for url in self.category_urls:
-            yield scrapy.Request(url=url, callback=self.category_parse)
+        for url in self.urls:
+            yield scrapy.Request(url=url, callback=self.parse)
+        # for url in self.category_urls:
+        #     yield scrapy.Request(url=url, callback=self.category_parse)
 
     def parse(self, response):
         for link in response.xpath("//body/header/descendant::a/@href").getall():

@@ -43,13 +43,13 @@ def get_parameters(table_name):
     cursor.execute(f"""
     SELECT COLUMN_NAME 
     FROM INFORMATION_SCHEMA.COLUMNS 
-    WHERE TABLE_NAME = '{table_name}'""")
+    WHERE TABLE_NAME = '{table_name}' AND TABLE_SCHEMA = 'crawl_database'""")
     parameter_names = cursor.fetchall()
 
     parameters = []
     for row in parameter_names:
         parameter_name = str(row[0])
-        if parameter_name.lower() in ["name", "url", "price", "id", "image_path"]:
+        if parameter_name.lower() in ["cpu", "chip", "name", "url", "price", "id", "image_path"]:
             continue
 
         parameter = {
