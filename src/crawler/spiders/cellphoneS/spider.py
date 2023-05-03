@@ -6,7 +6,10 @@ from crawler.items import ProductItem
 
 class CellphoneSSpider(scrapy.Spider):
     name = 'CellPhoneS_spider'
-    start_urls = ['https://cellphones.com.vn/']
+    start_urls = [
+        'https://cellphones.com.vn/',
+        "https://cellphones.com.vn/phu-kien.html",
+    ]
 
     api_category_url = "https://api.cellphones.com.vn/v2/graphql/query"
     
@@ -28,10 +31,11 @@ class CellphoneSSpider(scrapy.Spider):
             yield scrapy.Request(
                 url=url, 
                 callback=self.parse,
+                method="POST",
             )
             
     def parse(self, response):
-        category_box = response.xpath('descendant::div[contains(@class, "menu-tree")]/*/@href').getall()
+        category_box = response.xpath('descendant::div[contains(@class, "menu-tree") or contains(@class, "categories-content")]/*/@href').getall()
         
         for link in category_box:
             if link == "#" or (link in self.forbidden_urls):
@@ -51,7 +55,6 @@ class CellphoneSSpider(scrapy.Spider):
         
     def parse_category(self, response):
         url = response.request.url
-
         query = """
 query{
     products(
@@ -106,6 +109,12 @@ query{
 }"""
         
         category_info = response.xpath('descendant::div[contains(@class, "cps-container cps-body")]/*[2]/*[1]/@class').get()
+        
+        if not category_info:
+            return
+        
+        print(url)
+
         category_table = extract_num_from_last(category_info)
 
         yield scrapy.Request(
@@ -143,10 +152,16 @@ query{
             
             url_thumbnail_product = [self.thumbnail_url_prefix + filter['thumbnail']]
             url_product = category_url + "/" + general["url_path"]
-            name_product = general['name']  
-            price = filter['special_price']
+            name_product = general['name']
+            if filter['special_price'] > 0: 
+                price = filter['special_price']
+            else:
+                price = filter['price']
             
-            info={
+            if price <= 0:
+                price = None
+            
+            info = {
                 "name" : name_product,
                 "price" : price,
                 "url" : url_product,

@@ -24,7 +24,7 @@ for id in category_table:
 category_parameter = {
     "phone":{
         "chip" : "chipset",
-        "size": "display_size",
+        "screen": "display_size",
         "ram": "memory_internal",
         "disk": "storage",
         "OS": "os_version",
@@ -66,9 +66,9 @@ category_parameter = {
     },
     "smart_watch":{ 
         "brand": "phone_accessory_brands", #weird !!!
-        "size_screen": "smart_watch_duong_kinh_mat"
+        "screen": "smart_watch_duong_kinh_mat"
     },
     "other":{
-        "brand": "phone_accessory_brands",
+        # "brand": "phone_accessory_brands",
     }
 }

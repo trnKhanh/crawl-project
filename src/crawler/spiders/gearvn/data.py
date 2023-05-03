@@ -25,7 +25,7 @@ alias_parameter = {
     "disk": ["Ổ lưu trữ", "Ổ cứng", "SSD", "HDD"],
     "dpi" : ["Độ nhạy", "Độ phân giải", "DPI"],
     "size_keyboard": ["Layout", "Số phím"],
-    "size_screen": ["Kích thước"],
+    "size_screen": ["Kích thước đường chéo", "Kích thước"],
     "os": ["Hệ điều hành"],
     "ram": ["ram"],
     "screen": ["Màn hình"],
@@ -60,6 +60,6 @@ category_parameter = {
         "screen_size": alias_parameter["size_screen"],
     },
     "Other": {
-        "brand": alias_parameter["brand"],
+        # "brand": alias_parameter["brand"],
     }
 }

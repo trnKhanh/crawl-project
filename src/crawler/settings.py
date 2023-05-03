@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = "crawler.spiders"
 
 # Log file
 LOG_FILE = 'CRAWLER_SPIDER.log'
-LOG_FILE_APPEND = False
+# LOG_FILE_APPEND = False
 
 # feed
 # FEEDS = {
@@ -27,7 +27,7 @@ LOG_FILE_APPEND = False
 
 # Pipe line
 ITEM_PIPELINES ={
-    'crawler.pipelines.CustomImagePipeline': 1,
+    # 'crawler.pipelines.CustomImagePipeline': 1,
     'crawler.pipelines.SQLPipeline': 2,
 }
 IMAGES_STORE = 'web/static/images'

@@ -1,6 +1,22 @@
 import regex as re
 
+def extract_byte(data):
+    if not data:
+        return None
+    pattern = r'\d+\s*\w*?B'
+    amount = re.search(pattern, data.upper())
+    
+    if amount:
+        amount = amount.group()
+        number = re.search(r'\d+', amount)
+        if number:
+            number = number.group()
+            return amount.replace(" ","").replace(number, number + " ")
+    return None
+
 def extract_cpu(cpu):
+    if not cpu:
+        return None
     found = re.search(r'\d+(\.\d*)?\s*GHz', cpu, re.IGNORECASE)
     if found:
         first_pos = found.start()
@@ -12,8 +28,9 @@ def extract_cpu(cpu):
 
 
 def extract_disk(disk):
-    if disk == None:
+    if not disk:
         return None
+
     in_bracket = re.search(r'\(.*\)', disk)
     if in_bracket:
         disk = disk.replace(in_bracket.group(), "")
@@ -27,6 +44,7 @@ def extract_disk(disk):
     amount = re.search(pattern, disk.upper())
     if amount:
         amount = amount.group()
+        amount = extract_byte(amount)
         # amount = normalize_disk_amount(amount)
         if amount == None:
             return None
@@ -36,6 +54,7 @@ def extract_disk(disk):
     amount = re.search(pattern, disk.upper())
     if amount:
         amount = amount.group()
+        amount = extract_byte(amount)
         # amount = normalize_disk_amount(amount)
         if amount == None:
             return None
@@ -45,6 +64,7 @@ def extract_disk(disk):
     amount = re.search(pattern, disk.upper())
     if amount:
         amount = amount.group()
+        amount = extract_byte(amount)
         # amount = normalize_disk_amount(amount)
         if amount == None:
             return None
@@ -53,6 +73,9 @@ def extract_disk(disk):
     return None
 
 def extract_screen(screen):
+    if not screen:
+        return None
+    
     result = re.search(r'\d+(\.\d+)?(?=.*?(inch|\'|\"|\”))', screen)
     if result:
         result = result.group()
@@ -60,12 +83,7 @@ def extract_screen(screen):
     
     return None
 
-def extract_byte(data):
-    pattern = r'\d+\s*\w*?B'
-    amount = re.search(pattern, data.upper())
-    if amount:
-        return amount.group()
-    return None
+
 
 def normalize_disk_amount(amount):
     if amount == None:

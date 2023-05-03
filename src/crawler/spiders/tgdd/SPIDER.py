@@ -119,7 +119,10 @@ class TgddSpider(scrapy.Spider):
         # normalize product price to integer
         if price: 
             price = re.sub(r"\D", "", price)
-            price = int(price)
+            if price == '':
+                price = None
+            else:
+                price = int(price)
         product_info["price"] = price
         
         # parse product url

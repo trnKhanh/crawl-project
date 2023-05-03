@@ -73,5 +73,8 @@ def parameter_xpath(parameter_name):
 def price_to_int(price):
     if price: 
         price = re.sub(r"\D", "", price)
-        price = int(price)
+        if price == '':
+            price = None
+        else:
+            price = int(price)
         return price

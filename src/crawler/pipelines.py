@@ -45,7 +45,8 @@ class SQLPipeline:
             item['product_info']['screen_size'] = extract_screen(item['product_info']['screen_size'])
         if 'disk' in item['product_info']:
             item['product_info']['disk'] = extract_disk(item['product_info']['disk'])
-
+        if 'brand' in item['product_info']:
+            item['product_info']['brand'] = str(item['product_info']['brand']).strip('.').capitalize()
         column_names = (', '.join(item["product_info"].keys()) + ', image_path' + ', website')
         sql = f"""
             INSERT INTO {item["category"]} ({column_names}) 

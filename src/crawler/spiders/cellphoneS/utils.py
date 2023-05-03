@@ -1,15 +1,12 @@
-def price_to_int(pattern):
-    result = 0
-    
-    if pattern == None or pattern == "":
-        return result
-    
-    for i in pattern:
-        if not i.isdigit():
-            continue
-        result = result * 10 + int(i)
-        
-    return result
+import regex as re
+
+def price_to_int(price):
+    if price: 
+        price = re.sub(r"\D", "", price)
+        if price == '':
+            return None
+        price = int(price)
+        return price
 
 def extract_num_from_last(pattern):
     if pattern == None or pattern == "":

@@ -177,7 +177,10 @@ class FPTSpider(scrapy.Spider):
         price = product_box.xpath('descendant::*[contains(@class, "st-price-main")]/text()').get()
         if price: 
             price = re.sub(r"\D", "", price)
-            price = int(price)
+            if price == '':
+                price = None
+            else:
+                price = int(price)
         product_info["price"] = price
 
         url = response.request.url
@@ -230,7 +233,10 @@ class FPTSpider(scrapy.Spider):
         price = product_box.xpath('descendant::*[contains(@id, "product-price-online")]/text()').get()
         if price: 
             price = re.sub(r"\D", "", price)
-            price = int(price)
+            if price == '':
+                price = None
+            else:
+                price = int(price)
         product_info["price"] = price
 
         url = response.request.url
