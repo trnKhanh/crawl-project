@@ -214,7 +214,7 @@ class FPTSpider(scrapy.Spider):
 
                 product_info[parameter_name] = data
 
-        yield ProductItem(category=category, image_urls=image_urls, product_info=product_info, website="FPT")
+        yield ProductItem(category=category, image_paths=image_urls, product_info=product_info, website="FPT")
 
         yield from self.follow_product_type_1(response)
 
@@ -268,7 +268,7 @@ class FPTSpider(scrapy.Spider):
 
                 product_info[parameter_name] = data
         
-        yield ProductItem(category=category, image_urls=image_urls, product_info=product_info, website="FPT")
+        yield ProductItem(category=category, image_paths=image_urls, product_info=product_info, website="FPT")
     
     def follow_product_type_1(self, response):
         for product in response.xpath("descendant::*[contains(concat(' ', normalize-space(@class),' '), ' st-select ')]/*"):

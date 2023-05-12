@@ -13,8 +13,8 @@ SPIDER_MODULES = ["crawler.spiders"]
 NEWSPIDER_MODULE = "crawler.spiders"
 
 # Log file
-LOG_FILE = 'CRAWLER_SPIDER.log'
-# LOG_FILE_APPEND = False
+LOG_FILE = 'CRAWLER.log' # name of log file
+LOG_FILE_APPEND = False # toggle append to log file
 
 # feed
 # FEEDS = {
@@ -26,8 +26,8 @@ LOG_FILE = 'CRAWLER_SPIDER.log'
 # DUPEFILTER_DEBUG = True
 
 # Pipe line
-ITEM_PIPELINES ={
-    # 'crawler.pipelines.CustomImagePipeline': 1,
+ITEM_PIPELINES = {
+    'crawler.pipelines.CleansePipeline': 1,
     'crawler.pipelines.SQLPipeline': 2,
 }
 IMAGES_STORE = 'web/static/images'
@@ -43,21 +43,21 @@ DOWNLOAD_HANDLERS = {
 }
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+# CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-#DOWNLOAD_DELAY = 3
+# DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
-#CONCURRENT_REQUESTS_PER_DOMAIN = 16
-#CONCURRENT_REQUESTS_PER_IP = 16
+# CONCURRENT_REQUESTS_PER_DOMAIN = 16
+# CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+# COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
-#TELNETCONSOLE_ENABLED = False
+# TELNETCONSOLE_ENABLED = False
 
 # Override the default request headers:
 #DEFAULT_REQUEST_HEADERS = {

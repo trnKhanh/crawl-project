@@ -177,7 +177,7 @@ query{
                     info[product_parameter] = specify_info
                 
             yield ProductItem(category=get_category_table(id),
-                          image_urls=url_thumbnail_product,
+                          image_paths=url_thumbnail_product,
                           product_info=info,
                           website="CellPhoneS")
             

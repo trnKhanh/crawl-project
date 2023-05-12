@@ -74,7 +74,7 @@ class GearvnSpider(scrapy.Spider):
                     break
 
         yield ProductItem(category=category_table,
-                          image_urls=image_urls,
+                          image_paths=image_urls,
                           product_info=dict,
                           website="Gearvn")
     

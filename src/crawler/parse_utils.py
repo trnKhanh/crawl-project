@@ -26,50 +26,35 @@ def extract_cpu(cpu):
     cpu = cpu[:first_pos].strip()
     return cpu
 
-
 def extract_disk(disk):
     if not disk:
         return None
-
+    # remove () bracket
     in_bracket = re.search(r'\(.*\)', disk)
     if in_bracket:
         disk = disk.replace(in_bracket.group(), "")
+
+    # extract disk type (SSD, HHD, EMMC)
     disk_type = re.search(r'SSD|HDD|EMMC', disk.upper())
     if disk_type:
         disk_type = disk_type.group()
     else:
         disk_type = "SSD"
     
-    pattern = r'(?<=(SSD|HDD|EMMC)[^\S\n]*)\d+[^\S\n]*\w*?B'
-    amount = re.search(pattern, disk.upper())
-    if amount:
-        amount = amount.group()
-        amount = extract_byte(amount)
-        # amount = normalize_disk_amount(amount)
-        if amount == None:
-            return None
-        return amount + ' ' + disk_type
-    
-    pattern = r'\d+[^\S\n]*\w*?B(?=[^\S\n]*(SSD|HDD|EMMC))'
-    amount = re.search(pattern, disk.upper())
-    if amount:
-        amount = amount.group()
-        amount = extract_byte(amount)
-        # amount = normalize_disk_amount(amount)
-        if amount == None:
-            return None
-        return amount + ' ' + disk_type
-    
-    pattern = r'\d+\s*\w*?B'
-    amount = re.search(pattern, disk.upper())
-    if amount:
-        amount = amount.group()
-        amount = extract_byte(amount)
-        # amount = normalize_disk_amount(amount)
-        if amount == None:
-            return None
-        return amount + ' ' + disk_type
-    
+    # various pattern from observation on raw data
+    patterns = [r'(?<=(SSD|HDD|EMMC)[^\S\n]*)\d+[^\S\n]*\w*?B',
+                r'\d+[^\S\n]*\w*?B(?=[^\S\n]*(SSD|HDD|EMMC))',
+                r'\d+\s*\w*?B']
+    for pattern in patterns:
+        amount = re.search(pattern, disk.upper())
+        if amount:
+            amount = amount.group()
+            amount = extract_byte(amount)
+            # amount = normalize_disk_amount(amount)
+            if amount == None:
+                return None
+            return amount + ' ' + disk_type
+        
     return None
 
 def extract_screen(screen):

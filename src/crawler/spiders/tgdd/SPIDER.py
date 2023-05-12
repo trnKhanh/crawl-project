@@ -168,4 +168,4 @@ class TgddSpider(scrapy.Spider):
 
         category = get_category_table(category_id)
         image_urls = response.meta.get("image_urls")
-        yield ProductItem(category=category, image_urls=image_urls, product_info=product_info, website="Thế giới di động")
+        yield ProductItem(category=category, image_paths=image_urls, product_info=product_info, website="Thế giới di động")
