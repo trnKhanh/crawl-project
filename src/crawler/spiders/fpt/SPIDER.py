@@ -28,10 +28,10 @@ class FPTSpider(scrapy.Spider):
     # root urls
     urls = [
         "https://fptshop.com.vn",
-        "https://fptshop.com.vn/phu-kien",
-        "https://fptshop.com.vn/xiaomi",
+        # "https://fptshop.com.vn/phu-kien",
+        # "https://fptshop.com.vn/xiaomi",
         # "https://fptshop.com.vn/dien-gia-dung",
-        "https://fptshop.com.vn/apple"
+        # "https://fptshop.com.vn/apple"
     ]
     # loadmore API of pc parts
     loadmore_url = "https://fptshop.com.vn/linh-kien/api/LoadMoreProduct?CateId=&PageIndex={}&SortID=4&ListFilter=&CateNameAscii=&Keyword="
@@ -42,21 +42,36 @@ class FPTSpider(scrapy.Spider):
     ]
     def start_requests(self):
         # crawl root (contains categories' links)
-        for url in self.urls:
-            yield scrapy.Request(url=url, callback=self.parse, meta=dict(playwright=True))
-        # # scrape "linh kien may tinh"
+        # for url in self.urls:
+        #     yield scrapy.Request(url=url, callback=self.parse, meta=dict(playwright=True))
+        # scrape "linh kien may tinh"
+        # disabled for testing 
         yield scrapy.Request(url=self.loadmore_url.format(1), callback=self.loadmore_parse)
+        yield scrapy.Request(url="https://fptshop.com.vn/man-hinh/man-hinh-asus-va24ehe-23-8-inch", callback=self.product_parse_type_1, meta=dict(
+            playwright=True,
+            playwright_page_methods=[
+                PageMethod("wait_for_selector", "div.l-pd", timeout=10 * 1000, state='attached'),
+                PageMethod("wait_for_selector", "div.st-slider img", timeout=10 * 1000, state='attached'),
+                PageMethod("wait_for_selector", "ol.breadcrumb > li:nth-child(2)", timeout=10 * 1000, state='attached'),
+                PageMethod("wait_for_selector", ".st-pd-table-viewDetail > a", timeout=10 * 1000, state='attached'),
+                PageMethod("click", ".st-pd-table-viewDetail > a")
+            ],
+            name="",
+        ))
 
     # parse categories link from roots
     def parse(self, response):
         for category in response.xpath("//*[contains(@class, 'st-cate') or contains(@class, 'chapter-list') or contains(@class, 'characters home')]/descendant::a"):
             url = f'{response.urljoin(category.xpath("@href").get())}?trang=1000000'
 
-            yield scrapy.Request(url=url, callback=self.category_parse_type_1, errback=self.to_type_2, meta=dict(
-                playwright=True,
-                playwright_page_methods=[
-                    PageMethod("wait_for_selector", "div.fplistpdbox", timeout=10 * 1000, state='attached'),
-                ]
+            yield scrapy.Request(url=url, 
+                                 callback=self.category_parse_type_1, 
+                                 errback=self.to_type_2, 
+                                 meta=dict(
+                                    playwright=True,
+                                    playwright_page_methods=[
+                                        PageMethod("wait_for_selector", "div.fplistpdbox", timeout=10 * 1000, state='attached'),
+                                    ]
             ))
 
     # errback when the page is not type 1 
@@ -159,7 +174,7 @@ class FPTSpider(scrapy.Spider):
         product_box = response.css("div.l-pd")
 
         if "from_follow" not in response.meta and product_box.xpath("descendant::*[contains(concat(' ', normalize-space(@class),' '), ' st-select ')]/*"):
-            yield from self.follow_product_type_1(response)
+            yield from self.follow_product(response)
             return
         # parse category
         category_breadcrumb = "/".join(product_box.xpath("//*[contains(@class, 'breadcrumb-item')][not(contains(@class, 'active'))]/*/text()").getall())
@@ -175,12 +190,6 @@ class FPTSpider(scrapy.Spider):
         product_info["name"] = name
         # parse and normalize price
         price = product_box.xpath('descendant::*[contains(@class, "st-price-main")]/text()').get()
-        if price: 
-            price = re.sub(r"\D", "", price)
-            if price == '':
-                price = None
-            else:
-                price = int(price)
         product_info["price"] = price
 
         url = response.request.url
@@ -192,31 +201,11 @@ class FPTSpider(scrapy.Spider):
         if category in category_parameter:
             for parameter_name, name_in_web in category_parameter[category].items():
                 data = ', '.join([s.strip() for s in product_box.xpath(parameter_xpath(name_in_web)).getall()])
-                if parameter_name == 'cpu':
-                    data = data.replace(',', '')
-                elif parameter_name == 'disk':
-                    data = extract_disk(data)
-                elif parameter_name in ['screen', 'screen_size']:
-                    data = extract_screen(data)
-                elif parameter_name == 'ram':
-                    data = extract_byte(data)
-                else:
-                    to_remove = re.search(r'[\\/()]', name)
-                    if to_remove:
-                        to_remove = to_remove.start()
-                    else:
-                        to_remove = len(data)
-                    data = data[:to_remove]
-                    data = data.strip()
-
-                    if data.lower() in ['']:
-                        data = None
-
                 product_info[parameter_name] = data
 
         yield ProductItem(category=category, image_paths=image_urls, product_info=product_info, website="FPT")
 
-        yield from self.follow_product_type_1(response)
+        yield from self.follow_product(response)
 
     # parse products in pc parts
     def product_parse_type_2(self, response):
@@ -246,31 +235,11 @@ class FPTSpider(scrapy.Spider):
         if category in category_parameter:
             for parameter_name, name_in_web in category_parameter[category].items():
                 data = ', '.join([s.strip() for s in product_box.xpath(parameter_xpath(name_in_web)).getall()])
-                if parameter_name == 'cpu':
-                    data = data.replace(',', '')
-                elif parameter_name == 'disk':
-                    data = extract_disk(data)
-                elif parameter_name == 'screen':
-                    data = extract_screen(data)
-                elif parameter_name == 'ram':
-                    data = extract_byte(data)
-                else:
-                    to_remove = re.search(r'[\\/()]', name)
-                    if to_remove:
-                        to_remove = to_remove.start()
-                    else:
-                        to_remove = len(data)
-                    data = data[:to_remove]
-                    data = data.strip()
-
-                    if data.lower() in ['']:
-                        data = None
-
                 product_info[parameter_name] = data
         
         yield ProductItem(category=category, image_paths=image_urls, product_info=product_info, website="FPT")
     
-    def follow_product_type_1(self, response):
+    def follow_product(self, response):
         for product in response.xpath("descendant::*[contains(concat(' ', normalize-space(@class),' '), ' st-select ')]/*"):
             url = response.urljoin(product.xpath("@href").get())
             yield scrapy.Request(url=url, callback=self.product_parse_type_1, meta=dict(

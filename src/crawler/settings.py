@@ -14,7 +14,7 @@ NEWSPIDER_MODULE = "crawler.spiders"
 
 # Log file
 LOG_FILE = 'CRAWLER.log' # name of log file
-LOG_FILE_APPEND = False # toggle append to log file
+# LOG_FILE_APPEND = False # toggle append to log file
 
 # feed
 # FEEDS = {
@@ -37,6 +37,7 @@ USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
+
 DOWNLOAD_HANDLERS = {
     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",

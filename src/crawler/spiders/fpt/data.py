@@ -1,21 +1,21 @@
 import regex as re
 
 def get_category_table(category):
-    if re.search(r'\\bmáy tính xách tay\\b', category, re.IGNORECASE):
+    if re.search(r'\bmáy tính xách tay\b', category, re.IGNORECASE):
         return "laptop"
-    elif re.search(r'\\bđiện thoại\\b', category, re.IGNORECASE):
+    elif re.search(r'\bđiện thoại\b', category, re.IGNORECASE):
         return "phone"
-    elif re.search(r'\\bmáy tính bảng\\b', category, re.IGNORECASE):
+    elif re.search(r'\bmáy tính bảng\b', category, re.IGNORECASE):
         return "tablet"
-    elif re.search(r'\\bmáy tính để bàn\\b', category, re.IGNORECASE):
+    elif re.search(r'\bmáy tính để bàn\b', category, re.IGNORECASE):
         return "pc"
-    elif re.search(r'\\bbàn phím\\b', category, re.IGNORECASE):
+    elif re.search(r'\bbàn phím\b', category, re.IGNORECASE):
         return "keyboard"
-    elif re.search(r'\\bchuột\\b', category, re.IGNORECASE):
+    elif re.search(r'\bchuột\b', category, re.IGNORECASE):
         return "mouse"
-    elif re.search(r'\\bmàn hình\\b', category, re.IGNORECASE):
+    elif re.search(r'\bmàn hình\b', category, re.IGNORECASE):
         return "screen"
-    elif re.search(r'\\bsmartwatch\\b', category, re.IGNORECASE):
+    elif re.search(r'\bsmartwatch\b', category, re.IGNORECASE):
         return "smart_watch"
     else:
         return "other"

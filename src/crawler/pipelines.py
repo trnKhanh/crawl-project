@@ -23,6 +23,16 @@ from .parse_utils import *
 #         return item
 class CleansePipeline:
     def process_item(self, item, spider):
+        for name, data in item['product_info'].items():
+            if name.lower() != 'url':
+                item['product_info'][name] = remove_extra(data)
+        
+        if "name" in item['product_info']:
+            item['product_info']['name'] = extract_name(item['product_info']['name'])
+
+        if "price" in item['product_info']:
+            item['product_info']['price'] = extract_price(item['product_info']['price'])
+
         if "cpu" in item['product_info']:
             item['product_info']['cpu'] = extract_cpu(item['product_info']['cpu'])
         
@@ -39,7 +49,7 @@ class CleansePipeline:
             item['product_info']['disk'] = extract_disk(item['product_info']['disk'])
         
         if 'brand' in item['product_info']:
-            item['product_info']['brand'] = str(item['product_info']['brand']).strip('.').capitalize()
+            item['product_info']['brand'] = extract_brand(item['product_info']['brand'])
 
         return item
 

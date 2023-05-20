@@ -3,12 +3,17 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from crawler.spiders.cellphoneS.spider import CellphoneSSpider
 from crawler.spiders.gearvn.spider import GearvnSpider
-from crawler.spiders.tgdd.SPIDER import TgddSpider
-from crawler.spiders.fpt.SPIDER import FPTSpider
+from crawler.spiders.tgdd.spider import TgddSpider
+from crawler.spiders.fpt.spider import FPTSpider
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 import os
 import mysql.connector
+import time
+
+import schedule
+
+from multiprocessing import Process
 
 db = mysql.connector.connect(
     host="localhost",
@@ -23,9 +28,8 @@ def delete_data():
         cursor.execute(f"DELETE FROM {table[0]}")
     db.commit()
 
-if __name__ == '__main__':
-    if os.path.isfile('CRAWLER_SPIDER.log'):
-        os.remove('CRAWLER_SPIDER.log')
+def crawl():
+
     delete_data()
     process = CrawlerProcess(get_project_settings()) 
     process.crawl(TgddSpider).addCallback(
@@ -33,7 +37,19 @@ if __name__ == '__main__':
             lambda _: process.crawl(GearvnSpider).addCallback(
                 lambda _: process.crawl(CellphoneSSpider)
         )))
-    # d = process.join()
-    # d.addCallback(lambda _: foo(process))
 
     process.start()
+
+def start_crawl():
+    p = Process(target=crawl)
+    p.start()
+    p.join()
+
+if __name__ == '__main__':
+    # schedule.every().day.at("00:00").do(start_crawl)
+    schedule.every(3).hours.do(start_crawl)
+    start_crawl()
+    while True:
+        schedule.run_pending()
+
+        time.sleep(1)
