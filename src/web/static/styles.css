@@ -331,3 +331,8 @@ footer {
 .visible {
     display: flex;
 }
+
+.search-name{
+    color: black;
+    font-weight: bold;
+}

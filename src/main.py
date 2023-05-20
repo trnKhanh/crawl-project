@@ -29,7 +29,6 @@ def delete_data():
     db.commit()
 
 def crawl():
-
     delete_data()
     process = CrawlerProcess(get_project_settings()) 
     process.crawl(TgddSpider).addCallback(

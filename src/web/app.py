@@ -19,6 +19,17 @@ def category(table_name):
                            parameters=get_parameters(table_name), 
                            product_info=filter_product(table_name))
 
+@app.route("/search")
+def search():
+    name = str(request.args.get("q"))
+    page_index = to_int(request.args.get("pi"), 0)  
+    return render_template("search_page.html",
+                           categories=get_category(),  
+                           product_info=search_product(name, page_index),
+                           pi=page_index,
+                           name=name)
+
+
 @app.route("/filterProduct", methods=["POST"])
 def filterProduct():
     table_name = request.args.get("c")

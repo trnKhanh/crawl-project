@@ -100,7 +100,6 @@ def filter_product(table_name: str, filters = {}, page_index: int = 0, product_p
         filters = {}
     if sort_type not in [0, 1, 2]:
         sort_type = 0
-    
     sql = f"""
     SELECT name, price, url, image_path, website
     FROM {table_name}
@@ -151,4 +150,58 @@ def filter_product(table_name: str, filters = {}, page_index: int = 0, product_p
         listproduct.append(product)
     # product_info["listproduct"] = listproduct
     product_info["listproduct"] = render_template("product_layout.html", listproduct=listproduct)
+    return product_info
+
+def search_product(name:str,  page_index: int = 0, product_per_page: int = 20):
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        database="crawl_database"
+    )
+    cursor = db.cursor()
+    if name == None:
+        name = ""
+
+    cursor.execute("SHOW TABLES")
+    rows = cursor.fetchall()
+    basic_info_sql_cmd = []
+    for row in rows:
+        basic_info_sql_cmd.append(f"""
+        (SELECT name, price, url, image_path, website
+        FROM {row[0]})
+        """)
+
+    search_table_sql = " UNION ".join(basic_info_sql_cmd)
+    
+    search_sql = f"""
+    SELECT *
+    FROM ({search_table_sql}) AS R
+    WHERE name LIKE %s AND price IS NOT NULL
+    """
+    print(search_sql)
+    cursor.execute(search_sql, ['%' + name.replace(' ', '%') + '%'])
+    rows = cursor.fetchall()
+
+    product_info = {
+        "total": len(rows),
+        "category": "Search",
+        "listproduct": None
+    }
+    start_index = min(len(rows), page_index * product_per_page)
+    end_index = min(len(rows), start_index + product_per_page)
+
+    listproduct = []
+    for row in rows[start_index:end_index]:
+        print(row)
+        product = {
+            "name": row[0],
+            "price": '{:0,}'.format(row[1]).replace(",", ".") + " đ", 
+            "url": row[2],
+            "image_path": row[3],
+            "website": row[4],
+        }
+        listproduct.append(product)
+
+    product_info["listproduct"] = render_template("product_layout.html", listproduct=listproduct)
+
     return product_info
