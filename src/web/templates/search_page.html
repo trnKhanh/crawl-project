@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="product-container">
+    <div class="category-name-box">
+        {% if product_info %}
+            <span class="search-name" data-name="{{name}}">Search '{{name}}'</span>
+            <span class="product-number">({{ product_info["total"] }})</span>
+        {% endif %}
+    </div>
+
+    <div class="listproduct">
+        {% if product_info %}
+            {{ product_info["listproduct"] | safe }}
+        {% endif %}
+    </div>
+    <div class="paging-section" data-cur-page={{pi}}>
+    </div>
+</div>
+
+<script src="../static/search_script.js"></script>
+{% endblock %}
