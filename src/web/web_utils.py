@@ -60,17 +60,23 @@ def get_parameters(table_name):
         cursor.execute(f"""
         SELECT DISTINCT {parameter_name}
         FROM {table_name}
-        WHERE {parameter_name} IS NOT NULL
+        WHERE {parameter_name} IS NOT NULL 
+        AND price IS NOT NULL
         """)
         data = cursor.fetchall()
 
         for row in data:
             for value in str(row[0]).split(', '):
+                if value == '':
+                    continue
                 if parameter_name.lower() in ["screen"]:
                     if re.fullmatch(r'\s*\d+(.\d+)?\s*("|inch)\s*', value.lower()):
                         parameter["values"].add(value.strip())
                 else:
                     parameter["values"].add(value.strip())
+                
+                if parameter["name"].lower() != "disk":
+                    break
         parameter["values"].add("Other")
         parameter["values"] = list(parameter["values"])
         parameter["values"].sort()
@@ -129,6 +135,7 @@ def filter_product(table_name: str, filters = {}, page_index: int = 0, product_p
     elif sort_type == 2:
         sql += " ORDER BY price DESC"
     cursor.execute(sql, filter_choices)
+
     rows = cursor.fetchall()
     product_info = {
         "total": len(rows),

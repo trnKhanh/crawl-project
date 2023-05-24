@@ -30,7 +30,7 @@ class GearvnSpider(scrapy.Spider):
         
         if not category_frame:
             return
-
+        print(response.request.url)
         for product in response.css('.product-row'):
             product_link = product.css('a::attr(href)').get()
             product_link = response.urljoin(product_link)

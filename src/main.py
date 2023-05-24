@@ -45,8 +45,8 @@ def start_crawl():
     p.join()
 
 if __name__ == '__main__':
-    # schedule.every().day.at("00:00").do(start_crawl)
-    schedule.every(3).hours.do(start_crawl)
+    schedule.every().day.at("00:00").do(start_crawl)
+    # schedule.every(3).hours.do(start_crawl)
     start_crawl()
     while True:
         schedule.run_pending()

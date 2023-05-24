@@ -42,22 +42,11 @@ class FPTSpider(scrapy.Spider):
     ]
     def start_requests(self):
         # crawl root (contains categories' links)
-        # for url in self.urls:
-        #     yield scrapy.Request(url=url, callback=self.parse, meta=dict(playwright=True))
+        for url in self.urls:
+            yield scrapy.Request(url=url, callback=self.parse, meta=dict(playwright=True))
         # scrape "linh kien may tinh"
         # disabled for testing 
-        yield scrapy.Request(url=self.loadmore_url.format(1), callback=self.loadmore_parse)
-        yield scrapy.Request(url="https://fptshop.com.vn/man-hinh/man-hinh-asus-va24ehe-23-8-inch", callback=self.product_parse_type_1, meta=dict(
-            playwright=True,
-            playwright_page_methods=[
-                PageMethod("wait_for_selector", "div.l-pd", timeout=10 * 1000, state='attached'),
-                PageMethod("wait_for_selector", "div.st-slider img", timeout=10 * 1000, state='attached'),
-                PageMethod("wait_for_selector", "ol.breadcrumb > li:nth-child(2)", timeout=10 * 1000, state='attached'),
-                PageMethod("wait_for_selector", ".st-pd-table-viewDetail > a", timeout=10 * 1000, state='attached'),
-                PageMethod("click", ".st-pd-table-viewDetail > a")
-            ],
-            name="",
-        ))
+        # yield scrapy.Request(url=self.loadmore_url.format(1), callback=self.loadmore_parse)
 
     # parse categories link from roots
     def parse(self, response):
@@ -195,7 +184,7 @@ class FPTSpider(scrapy.Spider):
         url = response.request.url
         product_info["url"] = url
         # parse image url of product
-        image_urls = [product_box.xpath("descendant::div[contains(concat(' ', normalize-space(@class),' '), ' st-slider ')]/descendant::img[1]/@src").get()]
+        image_urls = [product_box.xpath("descendant::div[contains(concat(' ', normalize-space(@class),' '), ' st-slider ')]/descendant::*[not(contains(@class, 'st-slider__promo-box'))]/descendant::img[1]/@src").get()]
         
         # parse detail parameters
         if category in category_parameter:
@@ -220,12 +209,6 @@ class FPTSpider(scrapy.Spider):
         product_info["name"] = name
 
         price = product_box.xpath('descendant::*[contains(@id, "product-price-online")]/text()').get()
-        if price: 
-            price = re.sub(r"\D", "", price)
-            if price == '':
-                price = None
-            else:
-                price = int(price)
         product_info["price"] = price
 
         url = response.request.url

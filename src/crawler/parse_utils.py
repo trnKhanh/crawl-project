@@ -3,6 +3,7 @@ import regex as re
 def extract_byte(data):
     if not data:
         return None
+    data = str(data)
     pattern = r'\d+\s*\w*?B'
     amount = re.search(pattern, data.upper())
     
@@ -18,8 +19,9 @@ def extract_cpu(cpu):
     if not cpu:
         return None
     
+    cpu = str(cpu)
     cpu.replace(",","")
-    found = re.search(r'\d+(\.\d*)?\s*GHz', cpu, re.IGNORECASE)
+    found = re.search(r'(\d+(\.\d*)?\s*(GHz))|(up to)', cpu, re.IGNORECASE)
     if found:
         first_pos = found.start()
     else:
@@ -31,6 +33,8 @@ def extract_cpu(cpu):
 def extract_disk(disk_str):
     if not disk_str:
         return None
+    
+    disk_str = str(disk_str)
     # remove () bracket
     disks = disk_str.split(',')
     res = []
@@ -67,6 +71,7 @@ def extract_screen(screen):
     if not screen:
         return None
     
+    screen = str(screen)
     result = re.search(r'\d+(\.\d+)?(?=.*?(inch|\'|\"|\”))', screen)
     if result:
         result = result.group()
@@ -75,13 +80,15 @@ def extract_screen(screen):
     return None
 
 def extract_price(price):
+    if not price:
+        return None
+    price = str(price)
     if price: 
         price = re.sub(r"\D", "", price)
         if price == '':
-            price = None
+            return None
         else:
-            price = int(price)
-        return price
+            return int(price)
     else:
         return None
 
@@ -89,6 +96,7 @@ def extract_name(name):
     if not name:
         return None
     
+    name = str(name)
     to_remove = re.search(r'[\\/()]', name)
     if to_remove:
         to_remove = to_remove.start()
@@ -104,7 +112,8 @@ def remove_extra(data):
     if not data:
         return None
     
-    to_remove = re.search(r'[\\/()]', data)
+    data = str(data)
+    to_remove = re.search(r'[\\/\(\)]', data)
     if to_remove:
         to_remove = to_remove.start()
     else:
@@ -116,6 +125,10 @@ def remove_extra(data):
     return data
 
 def extract_brand(brand):
+    if not brand:
+        return None
+    
+    brand = str(brand)
     return str(brand).split(', ')[0].strip('.').capitalize()
 
 def normalize_disk_amount(amount):

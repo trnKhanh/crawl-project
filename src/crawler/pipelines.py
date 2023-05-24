@@ -25,7 +25,7 @@ class CleansePipeline:
     def process_item(self, item, spider):
         for name, data in item['product_info'].items():
             if name.lower() != 'url':
-                item['product_info'][name] = remove_extra(data)
+                item['product_info'][name] = remove_extra(str(data))
         
         if "name" in item['product_info']:
             item['product_info']['name'] = extract_name(item['product_info']['name'])
