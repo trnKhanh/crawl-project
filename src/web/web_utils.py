@@ -185,7 +185,7 @@ def search_product(name:str,  page_index: int = 0, product_per_page: int = 20):
     FROM ({search_table_sql}) AS R
     WHERE name LIKE %s AND price IS NOT NULL
     """
-    print(search_sql)
+    
     cursor.execute(search_sql, ['%' + name.replace(' ', '%') + '%'])
     rows = cursor.fetchall()
 
@@ -199,7 +199,7 @@ def search_product(name:str,  page_index: int = 0, product_per_page: int = 20):
 
     listproduct = []
     for row in rows[start_index:end_index]:
-        print(row)
+        
         product = {
             "name": row[0],
             "price": '{:0,}'.format(row[1]).replace(",", ".") + " đ", 
