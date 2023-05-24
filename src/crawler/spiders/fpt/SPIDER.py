@@ -28,10 +28,10 @@ class FPTSpider(scrapy.Spider):
     # root urls
     urls = [
         "https://fptshop.com.vn",
-        # "https://fptshop.com.vn/phu-kien",
-        # "https://fptshop.com.vn/xiaomi",
-        # "https://fptshop.com.vn/dien-gia-dung",
-        # "https://fptshop.com.vn/apple"
+        "https://fptshop.com.vn/phu-kien",
+        "https://fptshop.com.vn/xiaomi",
+        "https://fptshop.com.vn/dien-gia-dung",
+        "https://fptshop.com.vn/apple"
     ]
     # loadmore API of pc parts
     loadmore_url = "https://fptshop.com.vn/linh-kien/api/LoadMoreProduct?CateId=&PageIndex={}&SortID=4&ListFilter=&CateNameAscii=&Keyword="
@@ -46,7 +46,7 @@ class FPTSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse, meta=dict(playwright=True))
         # scrape "linh kien may tinh"
         # disabled for testing 
-        # yield scrapy.Request(url=self.loadmore_url.format(1), callback=self.loadmore_parse)
+        yield scrapy.Request(url=self.loadmore_url.format(1), callback=self.loadmore_parse)
 
     # parse categories link from roots
     def parse(self, response):
