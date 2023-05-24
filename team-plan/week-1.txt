@@ -1,6 +1,0 @@
-date: 24/3/2023
-work to do: 
-team: study "scrapy" and try to scrape a webpage
-Phu: gearvn
-Khanh: thegioididong
-Cuong: phongvu
